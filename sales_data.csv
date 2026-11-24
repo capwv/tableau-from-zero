@@ -1,0 +1,13 @@
+order_id,order_date,product_name,category,city,customer,quantity,revenue,cost
+1,2025-01-03,Laptop,Tech,Cairo,Aya,1,12000,9500
+2,2025-01-15,Chair,Furniture,Giza,Ali,1,2000,1400
+3,2025-01-21,Mouse,Tech,Cairo,Omar,2,500,300
+4,2025-02-05,Laptop,Tech,Alexandria,Mona,1,13000,10000
+5,2025-02-14,Desk,Furniture,Cairo,Aya,1,4000,2800
+6,2025-02-25,Chair,Furniture,Giza,Ali,1,2000,1400
+7,2025-03-04,Mouse,Tech,Cairo,Sara,2,600,350
+8,2025-03-11,Laptop,Tech,Alexandria,Mona,1,12500,9800
+9,2025-03-18,Desk,Furniture,Giza,Omar,1,4500,3100
+10,2025-04-02,Chair,Furniture,Cairo,Sara,1,2200,1500
+11,2025-04-09,Mouse,Tech,Cairo,Aya,2,700,420
+12,2025-04-25,Desk,Furniture,Alexandria,Mona,1,5000,3500
