@@ -1058,6 +1058,43 @@ CURRICULUM.forEach((l,i)=>{l.title=l.title.replace(/^الدرس \d+: /,'');l.tit
 
   var STORAGE_KEY = 'tableau-zero-progress-v1';
 
+  /* Quiz option shuffle: deterministic per question so answer positions are not predictable. Migrates saved picks once. */
+  (function () {
+    var POS = /(اختيار|خيار)\S*\s+(الأول|التاني|التالت)|الأولى|التانية|التالتة|الثانية|الثالثة/;
+    function hs(s) { var x = 2166136261; for (var i = 0; i < s.length; i++) { x ^= s.charCodeAt(i); x = Math.imul(x, 16777619); } return x >>> 0; }
+    var perms = {};
+    CURRICULUM.forEach(function (l) {
+      (l.quiz || []).forEach(function (q, i) {
+        var n = (q.options || []).length, k;
+        if (n < 2 || POS.test(q.explain || '') || q.__shuf) return;
+        var p = [], s = hs(l.id + ':' + i + ':v1');
+        for (k = 0; k < n; k++) p.push(k);
+        for (k = n - 1; k > 0; k--) { s = (Math.imul(s, 1664525) + 1013904223) >>> 0; var j = Math.floor(s / 4294967296 * (k + 1)), t = p[k]; p[k] = p[j]; p[j] = t; }
+        q.options = p.map(function (o) { return q.options[o]; });
+        q.answer = p.indexOf(q.answer);
+        q.__shuf = 1;
+        perms[l.id + ':' + i] = p;
+      });
+    });
+    try {
+      var FK = STORAGE_KEY + '-shuf1';
+      if (!localStorage.getItem(FK)) {
+        var raw = localStorage.getItem(STORAGE_KEY);
+        if (raw) {
+          var pr = JSON.parse(raw);
+          if (pr && pr.answers) {
+            Object.keys(pr.answers).forEach(function (key) {
+              var a = pr.answers[key], p = perms[key];
+              if (a && p && typeof a.picked === 'number') a.picked = p.indexOf(a.picked);
+            });
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(pr));
+          }
+        }
+        localStorage.setItem(FK, '1');
+      }
+    } catch (e) {}
+  })();
+
   function loadProgress() {
     try {
       var raw = localStorage.getItem(STORAGE_KEY);
