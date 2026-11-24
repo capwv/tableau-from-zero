@@ -1,0 +1,1635 @@
+<!DOCTYPE html>
+<script src="https://capwv.github.io/SAMS-MIS/sams-bg.js" defer></script>
+<html lang="ar" dir="rtl">
+<head>
+  <script>onload=()=>document.querySelector('footer').insertAdjacentHTML('beforeend','<p style="text-align:center;margin:16px" dir="ltr"><a style="color:#7dd3fc" href="https://capwv.github.io/SAMS-Compass/platforms.html">Platforms &amp; Tools</a></p>');</script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tableau من الصفر | اتعلم Tableau خطوة بخطوة</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>* { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg: #0f1420;
+  --panel: #171e2e;
+  --panel2: #1e2740;
+  --border: #2a3552;
+  --text: #e8ecf5;
+  --muted: #9aa7c2;
+  --accent: #4da3ff;
+  --accent2: #7c5cff;
+  --green: #2ecc71;
+  --red: #ff6b6b;
+  --amber: #ffc048;
+  --code-bg: #0a0e18;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Cairo', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.9;
+}
+
+code, pre, .mono {
+  font-family: 'JetBrains Mono', monospace;
+  direction: ltr;
+  text-align: left;
+}
+
+/* ===== Topbar ===== */
+.topbar {
+  position: sticky; top: 0; z-index: 50;
+  background: rgba(15,20,32,.92);
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid var(--border);
+}
+.topbar-inner {
+  max-width: 1200px; margin: 0 auto; padding: 12px 20px;
+  display: flex; align-items: center; gap: 24px; flex-wrap: wrap;
+}
+.logo { font-size: 1.3rem; font-weight: 900; }
+.logo span { color: var(--accent); }
+.progress-wrap { flex: 1; min-width: 180px; max-width: 420px; margin-inline-start: auto; }
+.progress-label { font-size: .8rem; color: var(--muted); margin-bottom: 4px; }
+.progress-label span { color: var(--accent); font-weight: 700; }
+.progress-bar { height: 8px; background: var(--panel2); border-radius: 99px; overflow: hidden; }
+.progress-fill { height: 100%; width: 0%; background: linear-gradient(90deg, var(--accent), var(--accent2)); border-radius: 99px; transition: width .5s ease; }
+
+/* ===== Layout ===== */
+.layout { max-width: 1200px; margin: 0 auto; display: flex; gap: 24px; padding: 24px 20px 80px; align-items: flex-start; }
+
+.sidebar {
+  width: 260px; flex-shrink: 0;
+  position: sticky; top: 76px;
+  background: var(--panel); border: 1px solid var(--border); border-radius: 14px;
+  padding: 14px; max-height: calc(100vh - 100px); overflow-y: auto;
+}
+#nav { display: flex; flex-direction: column; gap: 6px; }
+.nav-item {
+  display: flex; align-items: center; gap: 10px;
+  padding: 10px 12px; border-radius: 10px; cursor: pointer;
+  color: var(--muted); font-weight: 600; font-size: .92rem;
+  border: 1px solid transparent; transition: .15s;
+}
+.nav-item:hover { background: var(--panel2); color: var(--text); }
+.nav-item.active { background: var(--panel2); color: var(--text); border-color: var(--accent); }
+.nav-item .check { width: 20px; height: 20px; border-radius: 50%; border: 2px solid var(--border); display: inline-flex; align-items: center; justify-content: center; font-size: .7rem; flex-shrink: 0; }
+.nav-item.done .check { background: var(--green); border-color: var(--green); color: #06270f; }
+.nav-item .num { color: var(--accent); font-size: .78rem; min-width: 20px; }
+
+.reset-btn {
+  margin-top: 14px; width: 100%; padding: 9px;
+  background: transparent; border: 1px solid var(--border); border-radius: 10px;
+  color: var(--muted); font-family: inherit; font-size: .85rem; cursor: pointer;
+}
+.reset-btn:hover { color: var(--red); border-color: var(--red); }
+
+.content { flex: 1; min-width: 0; }
+
+/* ===== Hero ===== */
+.hero { background: linear-gradient(135deg, var(--panel), var(--panel2)); border: 1px solid var(--border); border-radius: 16px; padding: 28px; }
+.hero h2 { margin-bottom: 10px; font-size: 1.6rem; }
+.hero p { color: var(--muted); margin-bottom: 10px; }
+.hero-hint { color: var(--accent) !important; font-weight: 700; }
+
+/* ===== Lesson ===== */
+.lesson { background: var(--panel); border: 1px solid var(--border); border-radius: 16px; padding: 28px; }
+.lesson h2.lesson-title { font-size: 1.5rem; margin-bottom: 6px; }
+.lesson .lesson-sub { color: var(--muted); margin-bottom: 22px; font-size: .95rem; }
+.lesson h3 { margin: 26px 0 10px; color: var(--accent); font-size: 1.15rem; }
+.lesson p { margin-bottom: 12px; color: #d4dbea; }
+.lesson ul, .lesson ol { margin: 0 22px 14px; color: #d4dbea; }
+.lesson li { margin-bottom: 6px; }
+
+.kw { color: var(--amber); font-weight: 600; font-family: 'JetBrains Mono', monospace; direction: ltr; unicode-bidi: embed; background: var(--code-bg); padding: 1px 7px; border-radius: 6px; font-size: .85em; }
+
+pre {
+  background: var(--code-bg); border: 1px solid var(--border);
+  border-radius: 12px; padding: 16px 18px; margin: 12px 0 18px;
+  overflow-x: auto; font-size: .9rem; line-height: 1.7;
+}
+pre .c { color: #5b6b8c; }          /* comment */
+pre .k { color: var(--accent); }    /* keyword */
+pre .s { color: var(--green); }     /* string */
+pre .n { color: var(--amber); }     /* number */
+
+.note {
+  background: rgba(77,163,255,.08); border: 1px solid rgba(77,163,255,.35);
+  border-radius: 12px; padding: 14px 16px; margin: 14px 0; font-size: .93rem;
+}
+.note.warn { background: rgba(255,192,72,.07); border-color: rgba(255,192,72,.4); }
+.note b { color: var(--accent); }
+.note.warn b { color: var(--amber); }
+
+table.demo { border-collapse: collapse; margin: 12px 0 18px; font-size: .88rem; direction: ltr; }
+table.demo th, table.demo td { border: 1px solid var(--border); padding: 6px 14px; }
+table.demo th { background: var(--panel2); color: var(--accent); font-family: 'JetBrains Mono', monospace; }
+table.demo td { font-family: 'JetBrains Mono', monospace; color: #c7d1e6; }
+
+/* ===== Quiz ===== */
+.quiz-box, .exercise-box {
+  margin-top: 30px; border: 1px solid var(--border); border-radius: 14px;
+  padding: 20px; background: var(--panel2);
+}
+.quiz-box > h3, .exercise-box > h3 { margin-top: 0 !important; }
+.quiz-q { margin: 18px 0; padding: 16px; background: var(--panel); border: 1px solid var(--border); border-radius: 12px; }
+.quiz-q .q-text { font-weight: 700; margin-bottom: 12px; }
+.quiz-q pre { margin: 10px 0; }
+.opt {
+  display: block; width: 100%; text-align: right; margin-bottom: 8px;
+  padding: 10px 14px; border-radius: 10px; border: 1px solid var(--border);
+  background: var(--panel2); color: var(--text); font-family: inherit; font-size: .92rem;
+  cursor: pointer; transition: .15s;
+}
+.opt .mono { font-size: .88rem; }
+.opt:hover:not(:disabled) { border-color: var(--accent); }
+.opt:disabled { cursor: default; opacity: .85; }
+.opt.correct { border-color: var(--green); background: rgba(46,204,113,.12); }
+.opt.wrong { border-color: var(--red); background: rgba(255,107,107,.12); }
+.feedback { margin-top: 8px; font-size: .88rem; border-radius: 8px; padding: 8px 12px; display: none; }
+.feedback.ok { display: block; background: rgba(46,204,113,.1); color: #8deab5; }
+.feedback.no { display: block; background: rgba(255,107,107,.1); color: #ffabab; }
+
+.quiz-result {
+  margin-top: 18px; padding: 14px; border-radius: 12px; text-align: center;
+  font-weight: 700; display: none;
+}
+.quiz-result.show { display: block; background: rgba(46,204,113,.1); border: 1px solid var(--green); color: #8deab5; }
+
+/* ===== Exercises ===== */
+.exercise { margin: 16px 0; padding: 16px; background: var(--panel); border: 1px solid var(--border); border-radius: 12px; }
+.exercise .task { font-weight: 700; margin-bottom: 10px; }
+.solution-toggle {
+  padding: 8px 16px; border-radius: 8px; border: 1px solid var(--accent);
+  background: transparent; color: var(--accent); font-family: inherit;
+  font-size: .85rem; font-weight: 700; cursor: pointer;
+}
+.solution-toggle:hover { background: rgba(77,163,255,.1); }
+.solution { display: none; margin-top: 12px; }
+.solution.open { display: block; }
+.solution pre { margin-bottom: 6px; }
+.solution .why { color: var(--muted); font-size: .88rem; }
+
+/* ===== Lesson nav buttons ===== */
+.lesson-nav { display: flex; justify-content: space-between; margin-top: 34px; gap: 12px; }
+.lesson-nav button {
+  padding: 11px 22px; border-radius: 10px; border: 1px solid var(--border);
+  background: var(--panel2); color: var(--text); font-family: inherit;
+  font-weight: 700; cursor: pointer; font-size: .92rem;
+}
+.lesson-nav button:hover:not(:disabled) { border-color: var(--accent); color: var(--accent); }
+.lesson-nav button:disabled { opacity: .4; cursor: default; }
+.lesson-nav .next-btn { background: linear-gradient(90deg, var(--accent), var(--accent2)); border: none; color: #fff; }
+.lesson-nav .next-btn:hover:not(:disabled) { color: #fff; filter: brightness(1.1); }
+
+.complete-badge {
+  display: none; margin-top: 24px; text-align: center; padding: 16px;
+  background: rgba(46,204,113,.1); border: 1px solid var(--green); border-radius: 12px;
+  font-weight: 700; color: #8deab5; font-size: 1.05rem;
+}
+.complete-badge.show { display: block; }
+
+/* ===== Mobile ===== */
+.menu-toggle {
+  display: none; position: fixed; bottom: 18px; inset-inline-start: 18px; z-index: 60;
+  padding: 12px 20px; border-radius: 99px; border: none;
+  background: linear-gradient(90deg, var(--accent), var(--accent2));
+  color: #fff; font-family: inherit; font-weight: 700; cursor: pointer;
+  box-shadow: 0 6px 24px rgba(77,163,255,.4);
+}
+@media (max-width: 900px) {
+  .layout { flex-direction: column; }
+  .sidebar {
+    position: fixed; inset-inline-start: 0; top: 0; bottom: 0; z-index: 55;
+    width: 290px; border-radius: 0; transform: translateX(100%);
+    transition: transform .25s ease; max-height: none;
+  }
+  .sidebar.open { transform: translateX(0); }
+  .menu-toggle { display: block; }
+}
+:root{--bg:#04060d;--panel:#0a1120;--panel2:#0e1730;--border:#203454;--accent:#60a5fa;--accent2:#38bdf8}
+body{background-image:radial-gradient(ellipse at 50% 0,rgba(59,130,246,.15),transparent 65%)}
+.bg-shapes{position:fixed;inset:0;pointer-events:none;overflow:hidden;z-index:-1}.bg-shapes i{position:absolute;width:280px;height:280px;border:1px solid #3b82f62b;transform:rotate(30deg);top:20%;left:-100px}.bg-shapes i:nth-child(2){left:auto;right:-120px;top:55%;border-radius:50%;width:400px;height:400px}.bg-shapes i:nth-child(3){top:65%;left:40%;width:120px;height:120px;border-color:#38bdf82b}
+.brand-mark{width:65px;height:auto}.hero{text-align:center;padding:40px 28px}.hero-logo{width:150px;filter:drop-shadow(0 0 20px #3b82f64d)}.hero-pill{font-size:11px;letter-spacing:1px;color:var(--accent);margin:15px 0}.hero h2{font-size:2rem}.stats{display:flex;justify-content:center;gap:28px;flex-wrap:wrap;margin:30px 0}.stats span{font-size:12px;color:var(--muted)}.stats b{display:block;font-size:24px;color:white;direction:ltr}.cta{border:0;background:linear-gradient(135deg,#3b82f6,#1d4ed8);color:white;padding:13px 30px;border-radius:12px;font:700 16px Cairo,sans-serif;cursor:pointer;margin:10px 0 20px;box-shadow:0 8px 30px #3b82f62b}.links-bar{display:flex;justify-content:center;gap:20px;flex-wrap:wrap;padding:8px 12px;border-top:1px solid #20345466}.links-bar a,.links-bar button{color:var(--muted);font:600 12px Cairo,sans-serif;text-decoration:none;background:none;border:0;cursor:pointer}.links-bar a:hover,.links-bar button:hover{color:var(--accent)}.small{font-size:12px!important;color:var(--muted)!important}.nav-item{font-family:inherit;background:none;text-align:right;line-height:1.7}.sidebar{top:120px;max-height:calc(100vh - 145px)}
+textarea{width:100%;background:#040913;color:#d6e6ff;border:1px solid var(--border);border-radius:10px;padding:14px;font:14px/1.7 'JetBrains Mono',monospace;margin:10px 0;resize:vertical;text-align:left}.table-scroll{overflow-x:auto;max-width:100%}table.demo{display:block;overflow-x:auto;max-width:100%}pre .c{color:#91a6c8}.opt .mono{display:inline-block;direction:ltr;unicode-bidi:isolate}button:focus-visible,a:focus-visible,textarea:focus-visible{outline:2px solid #38bdf8;outline-offset:3px}.solution-toggle{margin:8px}.complete-badge{font-size:.95rem}
+@media(max-width:900px){.sidebar{top:0;max-height:none}.hero{padding:30px 18px}.lesson{padding:22px 16px}.layout{padding:18px 12px 85px}.hero h2{font-size:1.5rem}.topbar-inner{gap:10px}.progress-wrap{min-width:120px}.links-bar{gap:14px}.logo{font-size:1rem}.brand-mark{width:48px}.lesson-nav button{font-size:12px;padding:10px}.quiz-box,.exercise-box{padding:12px}}
+@media(prefers-reduced-motion:no-preference){.bg-shapes i{animation:float 12s ease-in-out infinite alternate}@keyframes float{to{transform:translateY(-25px) rotate(45deg)}}}
+
+footer a{color:var(--accent)}
+.content,.lesson{max-width:100%}.content{width:100%}pre{max-width:100%}.lesson p,.lesson li,.opt{overflow-wrap:anywhere}.lesson table{max-width:100%}
+
+/* SAMS-MIS visual language: ink-black surfaces, blue glass and quiet geometry. */
+:root{--bg:#06070a;--panel:#0a0c12;--panel2:#101522;--border:rgba(255,255,255,.10);--text:#f5f7fa;--muted:#98a1b3;--accent:#3b82f6;--accent2:#7aa7ff;--code-bg:#070a11}
+body{position:relative;isolation:isolate;background-image:radial-gradient(820px 420px at 50% -12%,rgba(59,130,246,.20),transparent 68%),radial-gradient(560px 340px at 88% 8%,rgba(139,92,246,.10),transparent 70%),radial-gradient(560px 340px at 8% 22%,rgba(56,189,248,.08),transparent 70%);background-attachment:fixed}
+.aurora{position:fixed;inset:0;z-index:0;pointer-events:none;background:radial-gradient(760px 360px at 50% -10%,rgba(59,130,246,.11),transparent 70%)}
+.bg-shapes{position:fixed;inset:0;z-index:0;overflow:hidden;pointer-events:none}
+.topbar,.layout,.menu-toggle{position:relative;z-index:1}
+.bg-shapes i{position:absolute;top:18%;left:-100px;width:280px;height:280px;border:1px solid rgba(59,130,246,.17);transform:rotate(30deg);animation:shapeFloat 14s ease-in-out infinite alternate}
+.bg-shapes i:nth-child(2){top:55%;left:auto;right:-130px;width:390px;height:390px;border-radius:50%;border-color:rgba(122,167,255,.15);animation-delay:-5s}
+.bg-shapes i:nth-child(3){top:72%;left:42%;width:110px;height:110px;border-color:rgba(56,189,248,.18);animation-delay:-9s}
+@keyframes shapeFloat{to{transform:translateY(-22px) rotate(44deg)}}
+.topbar{background:rgba(6,7,10,.78);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-bottom:1px solid rgba(255,255,255,.08)}
+.topbar-inner{max-width:1152px;padding:10px 16px;gap:16px}
+.logo{font-size:1.08rem;letter-spacing:.02em}.brand-mark{width:48px;filter:drop-shadow(0 8px 24px rgba(59,130,246,.2))}
+.progress-wrap{max-width:360px}.progress-bar{background:rgba(255,255,255,.08)}.progress-fill{background:linear-gradient(90deg,#3b82f6,#38bdf8);box-shadow:0 0 16px rgba(59,130,246,.35)}
+.links-bar{gap:10px;padding:8px 12px;border-top:1px solid rgba(255,255,255,.06);background:rgba(6,7,10,.28)}
+.links-bar a,.links-bar button{display:inline-flex;align-items:center;justify-content:center;gap:7px;min-height:36px;padding:0 12px;border:1px solid transparent;border-radius:11px;color:#98a1b3;font:700 12px Cairo,sans-serif;text-decoration:none;background:transparent;transition:background .2s,color .2s,border-color .2s}
+.links-bar a:hover,.links-bar button:hover{color:#fff;background:rgba(59,130,246,.12);border-color:rgba(122,167,255,.24)}
+.links-bar .community-link{color:#e9f1ff;background:rgba(255,255,255,.035);border-color:rgba(255,255,255,.14);white-space:nowrap}
+.links-bar .community-link:hover{background:#3b82f6;border-color:#3b82f6;color:#fff}
+.hero{position:relative;overflow:hidden;text-align:center;background:linear-gradient(160deg,rgba(255,255,255,.045),rgba(255,255,255,.012));border:1px solid rgba(255,255,255,.10);border-radius:20px;box-shadow:0 22px 60px -38px rgba(59,130,246,.4)}
+.hero:before{content:"";position:absolute;top:0;right:10%;left:10%;height:2px;background:linear-gradient(to left,transparent,#7aa7ff,transparent);opacity:.75}
+.hero-logo{filter:drop-shadow(0 18px 44px rgba(59,130,246,.28))}
+.hero-pill{display:inline-block;padding:5px 13px;border-radius:999px;background:rgba(59,130,246,.10);border:1px solid rgba(122,167,255,.32);color:#9dc0ff;font-weight:800}
+.hero h2{color:#f5f7fa;font-weight:900}.hero p{color:#b8c0cf}.hero-hint{color:#9dc0ff!important}
+.lesson,.sidebar,.quiz-box,.exercise-box,.quiz-q,.exercise{background:linear-gradient(180deg,rgba(255,255,255,.04),rgba(255,255,255,.015));border-color:rgba(255,255,255,.10);border-radius:18px;box-shadow:0 18px 45px -38px rgba(59,130,246,.32)}
+.lesson h3{color:#9dc0ff}.nav-item.active{background:rgba(59,130,246,.12);border-color:rgba(122,167,255,.45);color:#f5f7fa}
+.nav-item:hover{background:rgba(255,255,255,.06)}.nav-item.done .check{background:#3ddc84;border-color:#3ddc84}
+pre,textarea{border-color:rgba(255,255,255,.12);background:#070a11}pre .k{color:#7aa7ff}
+.note{background:rgba(59,130,246,.08);border-color:rgba(122,167,255,.25)}.note b{color:#9dc0ff}
+.cta{background:linear-gradient(135deg,#3b82f6,#1d4ed8);border-radius:12px;box-shadow:0 8px 30px rgba(59,130,246,.2)}
+footer{position:relative;border-top:1px solid rgba(255,255,255,.08);padding-top:24px!important}
+
+/* Ahmed's contact footer */
+.contact-footer{display:flex;flex-direction:column;align-items:center;gap:10px;margin-top:28px;padding:24px 16px 8px;border-top:1px solid rgba(255,255,255,.10);text-align:center;color:var(--muted)}
+.contact-footer .contact-name{color:var(--text);font-size:1.1rem;font-weight:800;letter-spacing:.01em}
+.contact-footer .contact-links{display:flex;justify-content:center;align-items:center;flex-wrap:wrap;gap:10px}
+.contact-footer .contact-links a{display:inline-flex;align-items:center;gap:6px;padding:7px 12px;border:1px solid rgba(122,167,255,.18);border-radius:999px;background:rgba(59,130,246,.07);color:#a8c4ff;text-decoration:none;transition:background .2s ease,border-color .2s ease,transform .2s ease}
+.contact-footer .contact-links a:hover{background:rgba(59,130,246,.16);border-color:rgba(122,167,255,.45);transform:translateY(-1px)}
+.contact-footer .contact-note{font-size:.78rem;color:var(--muted)}
+@media(max-width:480px){.contact-footer{padding-inline:10px}.contact-footer .contact-links{gap:7px}.contact-footer .contact-links a{padding:7px 10px;font-size:.88rem}}
+
+@media(max-width:430px){.hero-pill{font-size:9px;letter-spacing:.3px;padding:4px 8px;white-space:nowrap}.links-bar{gap:4px;padding-inline:6px}.links-bar a,.links-bar button{padding:0 8px;font-size:11px}.links-bar .community-link span{display:none}.topbar-inner{padding-inline:12px}.brand-mark{width:40px}}
+@media(prefers-reduced-motion:reduce){.bg-shapes i{animation:none}}
+
+
+.fx-grid{border-collapse:collapse;direction:ltr;font-family:'JetBrains Mono',monospace;font-size:.78rem;margin:12px 0;display:block;overflow-x:auto;max-width:100%}
+.fx-grid th{background:var(--panel2);color:var(--accent);border:1px solid var(--border);padding:3px 8px}
+.fx-grid td{border:1px solid var(--border);padding:3px 8px;color:#c7d1e6;white-space:nowrap}
+.fx-grid .fx-gap{border:none!important;background:transparent}
+.fx-line{border:1px solid var(--border);border-radius:10px;padding:10px 12px;margin:8px 0;background:var(--panel);direction:ltr;text-align:left;font-family:'JetBrains Mono',monospace;font-size:.88rem;overflow-wrap:anywhere}
+.fx-line .fx-f{color:var(--muted)}
+.fx-line .fx-r{font-weight:700;margin-top:4px}
+.fx-line .fx-ok{color:#3ddc84}
+.fx-line .fx-err{color:var(--red)}
+.fx-example{padding:6px 12px;border-radius:8px;border:1px solid var(--border);background:var(--panel2);color:var(--accent);font-family:'JetBrains Mono',monospace;font-size:.8rem;cursor:pointer;margin:8px 4px 0}
+#fx-output{margin-top:14px}
+#py-output pre{white-space:pre-wrap;background:#070a11;border:1px solid rgba(255,255,255,.12);border-radius:12px;padding:14px;margin:12px 0;direction:ltr;text-align:left;font-family:'JetBrains Mono',monospace;font-size:.88rem;line-height:1.7;color:#d6e6ff;max-height:420px;overflow:auto}#py-output img{max-width:100%;border-radius:12px;margin:10px 0;background:#fff;display:block}
+.dx-sel{display:flex;gap:14px;flex-wrap:wrap;margin:8px 0}.dx-sel label{display:flex;flex-direction:column;font-size:.85rem;color:var(--muted);gap:4px}
+.dx-sel select{background:var(--panel2);color:var(--text);border:1px solid var(--border);border-radius:8px;padding:6px 10px;font-family:inherit}
+.dx-chs{display:flex;flex-wrap:wrap;gap:8px;margin:8px 0}
+.dx-ch{padding:6px 12px;border-radius:8px;border:1px solid var(--border);background:var(--panel2);color:var(--text);font-family:inherit;cursor:pointer;font-size:.85rem}
+.dx-ch.active{border-color:var(--accent);color:var(--accent)}.dx-ch.done{border-color:var(--green);color:var(--green)}
+.dx-tname{font-weight:700;color:var(--accent);margin-top:10px}
+.dx-verdict{margin-top:6px;font-family:'Cairo',sans-serif;direction:rtl;text-align:right;font-size:.9rem}.dx-verdict.ok{color:#3ddc84}.dx-verdict.no{color:var(--red)}
+#dx-sol{white-space:pre-wrap}
+</style>
+</head>
+<body>
+<div class="aurora" aria-hidden="true"></div>
+<div class="bg-shapes" aria-hidden="true"><i></i><i></i><i></i></div>
+
+<header class="topbar">
+  <div class="topbar-inner">
+    <img class="brand-mark" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAALQAAABlCAMAAADTcTmKAAADAFBMVEVHcEz///////////////////7////////7/f///v8NAKH///////////8eU5n+/v9EZ8v7/Pv////+//8xrP+AtNp7nZ9Y/2D////9/P3////////8/f7//////////////////////v////////////////////////////////8TbP8hT3MTcv7///////////////////////9ctYuh8U3///////////////////8TX/L///8Ta/7///////////////8TV+UbW7UVQKP///////////////8UeP8TXen///8sW57///////////////////////8TQ62Lv9L///8nYaH///////////8SWO7////////29vseZ7v///////8TZ/4TbP0TZfwTXrb///8UZusTUL4TY+L///8TYPX///8TUNESZP4TVMr///////////9dyVb4+voTYO3///8TUdcWYb////8TQKUTWfwSYv4STKkTV9gTVdsUR6ETUrMSVtb///8UUK4TU8wScv/IiboTX98UbPkTTbMSXvkSV/oTVvIUfMUTUOwtpdMSW8kTZfizwFIVVq0UTcUVZNcTRrESRLYWVbITV9MTW90TaPUSXMQSn8kTVsTb0jkSW/YTTL4aWL0UULMTRqwRV8ITS8ETS7gSRb4TYdkTUscTT+ISTN8SQqoSTbEUV6YTUM8TUrsQQswUX/oTVcETUdMTUtQTUMoTWtYUaLIYYbkSQccRSL8Sa9USVckSWd4QWO0TStkTUMkUVK8TVdgTWbwTRb8SZPMbZbUgRZ4TTMsTYugVx+EUZuYTU8M3jNMVUqgRR7UTQK8TT78TUeEUgLoSWdESUr8SZ9oSVLcUduAjT6gTWa93xFoSYMwYXsUSXcISa88TWs0TPbITVtdDabg0a78SRc4sYswTX+AUYegTZN4TZcoTbuFhgb41YbETQ6kSgumIoMZTe8KJqt4TTLMaW7CIqMeCms3U2OP///8TVuEUWtYSUdkVXMoUZ9iJaHwdAAAA+nRSTlMA/Pn6/gT9AQMCAfv39QIFBAfyBgIFBgHbDTOJHOwV4BhbCMlgZ3sj1/Ov+QT776ZOgOXiBAKru6BWt/1j8RI7HxH5Fx6FR6Oy/f5KCULB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" alt="Infinity University Activity"><h1 class="logo">Tableau <span>من الصفر</span></h1>
+    <div class="progress-wrap">
+      <div class="progress-label"><span id="progress-text">0%</span> من الرحلة</div>
+      <div class="progress-bar"><div class="progress-fill" id="progress-fill"></div></div>
+    </div>
+  </div>
+<nav class="links-bar" aria-label="روابط الموقع"><button id="home-link">الرئيسية</button><button id="lab-link">معمل Tableau</button><a class="community-link" href="https://infinity-team-1-iua.github.io/IUA-SAMS/" target="_blank" rel="noopener" aria-label="Our Community">👥 <span>Our Community</span> ↗</a></nav></header>
+
+<div class="layout">
+  <aside class="sidebar" id="sidebar">
+    <nav id="nav"></nav>
+    <button class="reset-btn" id="reset-btn" title="مسح كل التقدم المحفوظ">🗑️ ابدأ من الأول</button>
+  </aside>
+
+  <main class="content" id="content">
+    <div class="hero" id="hero">
+      <img class="hero-logo" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAALQAAABlCAMAAADTcTmKAAADAFBMVEVHcEz///////////////////7////////7/f///v8NAKH///////////8eU5n+/v9EZ8v7/Pv////+//8xrP+AtNp7nZ9Y/2D////9/P3////////8/f7//////////////////////v////////////////////////////////8TbP8hT3MTcv7///////////////////////9ctYuh8U3///////////////////8TX/L///8Ta/7///////////////8TV+UbW7UVQKP///////////////8UeP8TXen///8sW57///////////////////////8TQ62Lv9L///8nYaH///////////8SWO7////////29vseZ7v///////8TZ/4TbP0TZfwTXrb///8UZusTUL4TY+L///8TYPX///8TUNESZP4TVMr///////////9dyVb4+voTYO3///8TUdcWYb////8TQKUTWfwSYv4STKkTV9gTVdsUR6ETUrMSVtb///8UUK4TU8wScv/IiboTX98UbPkTTbMSXvkSV/oTVvIUfMUTUOwtpdMSW8kTZfizwFIVVq0UTcUVZNcTRrESRLYWVbITV9MTW90TaPUSXMQSn8kTVsTb0jkSW/YTTL4aWL0UULMTRqwRV8ITS8ETS7gSRb4TYdkTUscTT+ISTN8SQqoSTbEUV6YTUM8TUrsQQswUX/oTVcETUdMTUtQTUMoTWtYUaLIYYbkSQccRSL8Sa9USVckSWd4QWO0TStkTUMkUVK8TVdgTWbwTRb8SZPMbZbUgRZ4TTMsTYugVx+EUZuYTU8M3jNMVUqgRR7UTQK8TT78TUeEUgLoSWdESUr8SZ9oSVLcUduAjT6gTWa93xFoSYMwYXsUSXcISa88TWs0TPbITVtdDabg0a78SRc4sYswTX+AUYegTZN4TZcoTbuFhgb41YbETQ6kSgumIoMZTe8KJqt4TTLMaW7CIqMeCms3U2OP///8TVuEUWtYSUdkVXMoUZ9iJaHwdAAAA+nRSTlMA/Pn6/gT9AQMCAfv39QIFBAfyBgIFBgHbDTOJHOwV4BhbCMlgZ3sj1/Ov+QT776ZOgOXiBAKru6BWt/1j8RI7HxH5Fx6FR6Oy/f5KCULB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" alt="Infinity University Activity"><div class="hero-pill">INFINITY UNIVERSITY ACTIVITY • TABLEAU FROM ZERO</div><h2>أهلاً بيك في رحلة Tableau من الصفر</h2>
+      <p>الموقع ده هيمشي معاك من الصفر خالص لحد ما تبني داشبورد مبيعات كامل في Tableau وتنشره على Tableau Public. كل درس فيه شرح بالعامية المصرية، أمثلة، كويز بإجابة فورية، وتمارين بالحل. وفي معمل Tableau تدريبي جوه المتصفح تجرب فيه الـ Calculated Fields على داتا الكورس. تقدمك بيتحفظ لوحده في المتصفح، فممكن تقفل وترجع تكمل من مكانك.</p>
+      <div class="stats"><span><b>14</b> درس متدرج</span><span><b>56</b> سؤال تفاعلي</span><span><b>Tableau</b> معمل تدريبي</span></div><button id="start-btn" class="cta">ابدأ رحلتك ←</button><p class="hero-hint">من أول Connect لحد داشبورد منشور على Tableau Public</p><p class="small">التقدم محفوظ على نفس المتصفح والجهاز فقط. مسح بيانات المتصفح بيمسحه.</p>
+    </div>
+    <div id="lesson"></div><section class="lesson" id="lab" hidden><h2>معمل Tableau التدريبي</h2>
+<div class="note warn">اقرا ده الأول: Tableau Public مبيشتغلش جوه المتصفح بالكامل، وده مش نسخة منه. ده <b>محاكي مصغر للـ Calculated Fields</b> مكتوب خصيصاً للموقع بيحسب الصيغ اللي بتكتبها على نفس داتا الكورس. السحب والإفلات والـ Visuals والنشر بتتطبق في Tableau Public الحقيقي. وأي نتيجة هنا اتحسبت فعلاً من صيغتك، مش نتايج متسجلة مسبقاً.</div>
+<h3>الداتا (جدول orders)</h3><div id="fx-sheet"></div>
+<h3>الـ Rows Shelf</h3>
+<p class="small">اختار Dimension يتحط على Rows زي ما بتعمل في Tableau، والصيغة هتتحسب لوحدة لكل قيمة منه. سيبه "بدون" لو عايز نتيجة واحدة إجمالية (زي Text Table فيه Grand Total بس).</p>
+<div class="dx-sel"><label>Rows <select id="sel-rows"><option value="all">بدون</option><option>city</option><option>category</option><option>product_name</option><option>customer</option><option>month</option></select></label></div>
+<h3>التحديات</h3><p class="small" id="dx-score"></p><div id="dx-challenges" class="dx-chs"></div>
+<div class="note" id="dx-current" hidden></div><button class="solution-toggle" id="dx-sol-btn" hidden>أظهر الحل النموذجي</button><pre id="dx-sol" hidden dir="ltr"></pre>
+<h3>اكتب الـ Calculated Field بتاعك</h3>
+<label for="fx-input">صيغة Tableau (الحقول بين أقواس مربعة زي <code>[revenue]</code>، وممكن تعرف Calculated Field باسم: <code>Profit Ratio = SUM([profit]) / SUM([revenue])</code> وتناديه بعدين بـ <code>[Profit Ratio]</code>)</label>
+<textarea id="fx-input" spellcheck="false" rows="3" dir="ltr">SUM([revenue])</textarea>
+<button class="cta" id="run-fx">احسب ▶</button><button class="solution-toggle" id="reset-fx">🔄 امسح السجل والـ Calculated Fields</button><button class="solution-toggle" id="reset-lab">مسح تقدم التحديات</button>
+<div><button class="fx-example" data-fx="SUM([revenue])">إجمالي الإيراد</button><button class="fx-example" data-fx="SUM([profit])">إجمالي الربح</button><button class="fx-example" data-fx="Profit Ratio = SUM([profit]) / SUM([revenue])">نسبة الربح</button><button class="fx-example" data-fx="SUM(IF [city] = 'Cairo' THEN [revenue] END)">إيراد القاهرة</button><button class="fx-example" data-fx="COUNTD([customer])">عدد العملاء</button><button class="fx-example" data-fx="AVG([revenue])">متوسط الطلب</button></div>
+<div id="dx-measures" class="small"></div><div id="fx-output" aria-live="polite"></div>
+<p class="small">المعمل بيشتغل على جهازك ومفيش حاجة بتتبعت لأي سيرفر. الدوال المدعومة: SUM AVG MIN MAX COUNT COUNTD، و IF ... THEN ... ELSE ... END و IIF، و AND و OR و NOT، والعمليات والمقارنات، والنصوص بين علامتي تنصيص مفردة زي <code>'Cairo'</code>. في Tableau الحقيقي فيه دوال أكتر بكتير (تواريخ ونصوص و LOD و Table Calculations).</p></section>
+  <footer class="small" style="text-align:center;margin:30px 0">من أسرة Infinity University Activity<br><a href="https://help.tableau.com/current/public/desktop/en-us/gettingstarted_overview.htm">الدليل الرسمي لـ Tableau Public</a> · <a href="https://public.tableau.com/app/discover">Tableau Public (مجاني)</a> · <a href="https://help.tableau.com/current/pro/desktop/en-us/functions.htm">مرجع دوال Tableau</a><p>معمل Tableau محاكي تدريبي مكتوب خصيصاً للموقع: بيحسب صيغ الـ Calculated Fields على داتا الكورس، مش Tableau نفسه. بناء الـ Visuals والخرايط والنشر بتتطبق في Tableau Public الحقيقي.</p><div class="contact-footer" aria-label="بيانات التواصل">
+      <div class="contact-name">Ahmed Wael Othman</div>
+      <nav class="contact-links" aria-label="روابط التواصل">
+        <a href="https://www.linkedin.com/in/ahmed-wael-othman/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn profile">in <span>LinkedIn</span></a>
+        <a href="mailto:ahmedwaelothman612@gmail.com" aria-label="Email Ahmed Wael Othman">✉ <span>Gmail</span></a>
+        <a href="https://github.com/capwv" target="_blank" rel="noopener noreferrer" aria-label="GitHub profile">⌘ <span>GitHub</span></a>
+      </nav>
+    </div>
+  </footer></main>
+</div>
+
+<button class="menu-toggle" id="menu-toggle">☰ الدروس</button>
+<script>
+/* Tableau من الصفر : curriculum */
+var CURRICULUM = window.CURRICULUM || [];
+function P(t){return {type:'p',text:t};}
+function H(t){return {type:'h',text:t};}
+function N(t){return {type:'note',text:t};}
+function W(t){return {type:'note',warn:true,text:t};}
+function L(a){return {type:'list',items:a};}
+function C(t){return {type:'code',code:t};}
+function T(head,rows){return {type:'table',head:head,rows:rows};}
+function O(t,m){return m?{text:t,mono:true}:{text:t};}
+function Q(q,opts,ans,explain,code){var o={q:q,options:opts.map(function(x){return typeof x==='string'?{text:x}:x;}),answer:ans,explain:explain};if(code)o.code=code;return o;}
+function X(task,code,why,hint){var o={task:task,code:code||'',why:why||''};if(hint)o.hint=hint;return o;}
+
+CURRICULUM.push({
+  id:'intro',
+  nav:'مقدمة: ليه Tableau أصلاً؟',
+  title:'الدرس 1: ليه Tableau أصلاً؟',
+  subtitle:'من جدول أرقام محدش بيبص عليه، لرسمة بتوصل الفكرة في ثواني',
+  blocks:[
+    P('تخيل إن معاك جدول مبيعات فيه آلاف الصفوف، والمدير سألك: أنهي مدينة بتبيع أكتر؟ إيه تريند الشهور؟ تقدر تطلع الإجابة بمعادلات، بس المدير مش هيقرا جدول أرقام. Tableau اتعمل عشان اللحظة دي: بتوصل الداتا، وتسحب الحقول بالماوس، وهو يرسم Charts تفاعلية تجاوب بعينك قبل ما تكتب سطر واحد.'),
+    P('Tableau أشهر أداة Data Visualization في السوق، وشغلها كله مبني على فكرة واحدة: إنك تفكر بالسحب والإفلات مش بالكود. بتجرب بسرعة، ولو الرسمة مش عجباك بتغيرها في ثانية.'),
+    H('عيلة Tableau'),
+    L([
+      '`Tableau Public`: النسخة المجانية اللي هنشتغل عليها في الكورس ده. فيها تقريباً كل إمكانيات البناء، بس شغلك بيتحفظ على ملفك الشخصي العام على public.tableau.com، يعني أي حد يقدر يشوفه. مثالية للتعلم ولعمل Portfolio.',
+      '`Tableau Desktop`: النسخة المدفوعة للشركات. بتحفظ محلي على جهازك وبتنشر على سيرفر خاص.',
+      '`Tableau Server / Cloud`: منصات الشركات لمشاركة التقارير جوه المؤسسة بصلاحيات.',
+      '`Tableau Prep`: أداة منفصلة لتنضيف وتجهيز الداتا، مش محتاجينها في الكورس ده.'
+    ]),
+    N('طالما بتتعلم، Tableau Public كفاية جداً: نفس الـ Charts ونفس الـ Calculations. الفرق الأساسي إن الحفظ عام مش خاص، فمتحطش داتا حساسة عليه أبداً.'),
+    H('إمتى Tableau وإمتى حاجة تانية؟'),
+    L([
+      'عايز تستكشف داتا بسرعة وتجرب زوايا كتير: Tableau ممتاز.',
+      'عايز Dashboard تفاعلي الناس تفلتر فيه بنفسها: Tableau أو Power BI.',
+      'عايز Report ثابت بيتطبع أو يتبعت PDF: Excel أو أي أداة تقيلة على التنسيق ممكن تكفي.',
+      'الداتا محتاجة تنضيف تقيل جداً: نظفها الأول (SQL أو Python أو Power Query) وبعدين ارسم.'
+    ]),
+    H('الداتا اللي هنشتغل عليها'),
+    P('زي مواقع SQL و Excel و Power BI من نفس السلسلة: جدول مبيعات مصري صغير فيه 12 طلب على 4 شهور من 2025، علشان كل رقم هتشوفه تقدر تحسبه بإيدك وتتأكد منه. الملفين `sales_data.csv` و `products.csv` موجودين في الـ GitHub repo بتاع الموقع ده.'),
+    T(['order_id','order_date','product_name','category','city','customer','quantity','revenue','cost'],[
+      ['1','2025-01-03','Laptop','Tech','Cairo','Aya','1','12000','9500'],
+      ['2','2025-01-15','Chair','Furniture','Giza','Ali','1','2000','1400'],
+      ['3','2025-01-21','Mouse','Tech','Cairo','Omar','2','500','300']
+    ]),
+    W('Tableau Public مش بيشتغل جوه الموقع ده، فمعمل الموقع مش نسخة منه. هو محاكي تدريبي للـ Calculated Fields بيحسب صيغتك على نفس الداتا، وكل حاجة تانية بتتطبق في Tableau Public الحقيقي عندك.')
+  ],
+  quiz:[
+    Q('أنهي نسخة من Tableau مجانية ومناسبة للتعلم؟',['Tableau Server','Tableau Public','Tableau Prep'],1,'Tableau Public مجاني وفيه تقريباً كل إمكانيات البناء، بس الحفظ بيكون عام على ملفك الشخصي.'),
+    Q('إيه الفرق الأساسي بين Tableau Public و Tableau Desktop؟',['Public مفيهوش Charts','Public بيحفظ شغلك بشكل عام على الإنترنت، Desktop بيحفظ محلي','Desktop مبيشتغلش على ويندوز'],1,'Tableau Public بيحفظ على public.tableau.com حيث أي حد يشوف شغلك. Desktop المدفوع بيحفظ محلي وبينشر على سيرفر خاص.'),
+    Q('معمل Tableau اللي في الموقع ده هو:',['نسخة كاملة من Tableau بتشتغل في المتصفح','محاكي تدريبي بيحسب صيغ الـ Calculated Fields على داتا الكورس','الموقع الرسمي لـ Tableau'],1,'Tableau مش بيشتغل جوه المتصفح بنفس الإمكانيات، فعملنا معمل واضح إنه محاكي صغير للـ Calculated Fields بس.'),
+    Q('ليه Tableau منتشر في تحليل البيانات؟',['لأنه بيكتب SQL لوحده','لأنه بيخليك تستكشف الداتا وترسم بالسحب والإفلات من غير كود','لأنه مجاني للشركات'],1,'الفكرة الأساسية في Tableau إنك تبني Visualizations تفاعلية بالسحب والإفلات، فبتجرب أفكار كتير بسرعة.')
+  ],
+  exercises:[
+    X('افتح public.tableau.com/app/discover واتفرج على 3 Dashboards من الـ Gallery. اكتب إيه اللي عجبك في كل واحدة.','','مفيش إجابة نموذجية هنا. المهم تلاحظ إزاي كل Dashboard بتحكي قصة: عنوان واضح، أرقام كبيرة فوق، ورسوم تحتها بتفسر.'),
+    X('اكتب بجملة واحدة الفرق بين Tableau Public و Tableau Desktop.','','Public مجاني والحفظ فيه عام على الإنترنت، Desktop مدفوع والحفظ محلي والنشر خاص.'),
+    X('نزّل ملف `sales_data.csv` من الـ GitHub repo بتاع الموقع وافتحه بأي برنامج. كام صف وكام عمود فيه؟','','12 صف و9 أعمدة: order_id و order_date و product_name و category و city و customer و quantity و revenue و cost.'),
+    X('اذكر موقفين من شغلك أو دراستك ممكن Dashboard في Tableau يفرق فيهم.','','أي إجابة منطقية تقبل، مثلاً: متابعة مبيعات شهرية، أو حضور طلبة. الفكرة إنك تلاقي داتا بتتسأل عنها نفس الأسئلة بشكل متكرر.')
+  ]
+});
+
+CURRICULUM.push({
+  id:'setup',
+  nav:'تجهيز Tableau Public',
+  title:'الدرس 2: تجهيز Tableau Public من الصفر',
+  subtitle:'حساب وتنزيل وأول Workbook في ربع ساعة',
+  blocks:[
+    P('عشان تشتغل Tableau Public محتاج حاجتين: حساب مجاني على موقع Tableau Public، والبرنامج نفسه على جهازك (ويندوز أو ماك). الحساب هو اللي شغلك بيتحفظ عليه، والبرنامج هو اللي بتبني بيه.'),
+    H('عمل الحساب'),
+    L([
+      'افتح public.tableau.com واضغط `Sign Up`.',
+      'سجل بإيميلك واملأ البيانات، وهيوصلك إيميل تأكيد.',
+      'بعد التفعيل هيكون ليك Profile عام: ده المكان اللي كل Workbook بتنشره هيظهر فيه.'
+    ]),
+    H('تنزيل البرنامج'),
+    L([
+      'من نفس الموقع ادخل على صفحة التحميل واختار نسخة ويندوز أو ماك، الملف بيكون حوالي نص جيجا.',
+      'سطب البرنامج بالإعدادات العادية، وافتحه.',
+      'أول ما يفتح هتلاقي شاشة فيها Connect على الشمال وقايمة Workbooks اتفتحت قبل كده.',
+      'سجل دخول من البرنامج بنفس الحساب، عشان لما تحفظ يترفع على ملفك على طول.'
+    ]),
+    N('عندك طريق تاني من غير تنزيل: من صفحتك على Tableau Public اضغط `Create` وابني في المتصفح (Web Authoring). شكلها قريب جداً من البرنامج، بس البرنامج أسلس وأشمل، والكورس ده ماشي عليه.'),
+    H('الحفظ في Tableau Public مختلف'),
+    P('في البرامج العادية بتضغط Save فبيتسجل ملف على جهازك. هنا `File ثم Save to Tableau Public` بيرفع الـ Workbook على حسابك العام. تقدر تخفيه من الـ Gallery من إعدادات الـ Profile، بس فعلياً أي حد معاه اللينك يقدر يشوفه. مفيش حفظ محلي في نسخة Public.'),
+    W('أبداً متحط داتا شغل حقيقية أو داتا فيها أسماء وأرقام ناس على Tableau Public. كل اللي بينشر عليه عام. داتا الكورس دي داتا تدريب ملهاش قيمة، عشان كده ماشيين بيها.'),
+    H('شاشة البداية'),
+    L([
+      'على الشمال قايمة Connect: أنواع الملفات والمصادر اللي تقدر توصلها.',
+      'في النص Workbooks اتفتحت مؤخراً وأمثلة جاهزة (Sample Workbooks).',
+      'على اليمين قسم Discover فيه فيديوهات تعليمية ومجتمع.'
+    ])
+  ],
+  quiz:[
+    Q('عشان تحفظ Workbook في Tableau Public لازم:',['تدفع اشتراك','يكون عندك حساب Tableau Public والحفظ بيكون عليه','تحفظ على الفلاشة'],1,'الحفظ في نسخة Public بيكون على حسابك العام على public.tableau.com، فالحساب أساسي.'),
+    Q('لما تحفظ شغل فيه داتا عملاء حقيقية على Tableau Public:',['الداتا بتتشفر لوحدها','أي حد يقدر يشوفها، ودي مخاطرة حقيقية','محدش يقدر يشوف غير الـ Chart'],1,'النشر على Tableau Public عام بالكامل: الـ Workbook والداتا اللي جواه. داتا حساسة مكانها مش هنا أبداً.'),
+    Q('إيه بديل تنزيل البرنامج لو عايز تبني من المتصفح؟',['مفيش بديل','Web Authoring من زرار Create على موقع Tableau Public','Tableau Prep'],1,'من ملفك على Tableau Public تقدر تضغط Create وتبني Workbook كامل في المتصفح.'),
+    Q('Tableau Public بيشتغل على:',['ويندوز بس','ماك بس','ويندوز وماك'],2,'نسخة Public ليها برنامج لويندوز وبرنامج لماك، عكس Power BI اللي ويندوز بس.')
+  ],
+  exercises:[
+    X('اعمل حساب Tableau Public وفعّله من الإيميل، واكتب الـ Username اللي اخترته.','','أي Username متاح يمشي. ده هيبقى الرابط العام بتاعك: public.tableau.com/app/profile/ واسمك.'),
+    X('نزّل برنامج Tableau Public وسطبه وافتحه، وسجل دخول. اكتب أول 3 مصادر ظاهرين في قايمة Connect.','','غالباً: Microsoft Excel و Text file و JSON file (وترتيبهم ممكن يختلف مع الإصدارات).'),
+    X('افتح البرنامج ودور على زرار Create في الموقع، وقارن: إيه الفرق اللي حاسه بين فكرة البناء في المتصفح وفي البرنامج؟','','الاتنين نفس المنطق. البرنامج أسرع استجابة وأشمل، والمتصفح مريح لو جهازك ضعيف أو مش بتاعك.'),
+    X('في جملة: ليه مينفعش تنشر Dashboard فيها مرتبات موظفين على Tableau Public؟','','لأن كل منشور على Tableau Public عام وأي حد يقدر يشوفه ويحمله، فدي بيانات حساسة مكانها أدوات النشر الخاصة زي Server أو Cloud.')
+  ]
+});
+
+CURRICULUM.push({
+  id:'connect',
+  nav:'توصيل الداتا',
+  title:'الدرس 3: توصيل الداتا: أول Contact مع الملفات',
+  subtitle:'CSV و Excel و Join: من ملفين لجدول واحد جاهز للرسم',
+  blocks:[
+    P('أول خطوة في أي مشروع هي إنك توصل الداتا. من شاشة البداية، قايمة `Connect` فيها أنواع المصادر: ملفات (Excel و Text file يعني CSV و JSON و PDF)، ومصادر سيرفر زي Google Sheets. في نسخة Public المصادر أقل من النسخة المدفوعة، بس الملفات و Google Sheets بيغطوا أغلب شغل التعلم.'),
+    H('نوصل sales_data.csv'),
+    L([
+      'اضغط `Text file` واختار `sales_data.csv`.',
+      'Tableau هيفتح صفحة `Data Source`: فوق الـ Canvas (مكان الجداول والعلاقات)، وتحت الـ Data Grid (أول صفوف من الداتا).',
+      'بص على الـ Grid: لازم تشوف 12 صف و9 أعمدة بالظبط.',
+      'فوق كل عمود أيقونة نوع البيانات: `#` للأرقام، `Abc` للنصوص، وأيقونة تقويم للتواريخ.'
+    ]),
+    N('Tableau بيخمن نوع كل عمود لوحده. لو لقيت order_date نص مش تاريخ، اضغط على الأيقونة فوق العمود واختار `Date`. النوع الصح بيفرق في كل حاجة بعد كده.'),
+    H('نوصل جدول تاني ونعمل Join'),
+    P('جدول المنتجات `products.csv` فيه سعر الوحدة والمورد لكل منتج. عايزين نلزقهم جنب بعض على أساس اسم المنتج:'),
+    L([
+      'من نفس صفحة Data Source اسحب `products.csv` جنب جدول sales_data على الـ Canvas.',
+      'Tableau هيحاول يخمن عمود الربط. اتأكد إنه `product_name` من الجهتين.',
+      'نوع الربط الافتراضي `Inner Join`: بياخد بس الصفوف اللي ليها مطابقة في الجدولين. في داتتنا كل منتج في المبيعات موجود في جدول المنتجات، فالـ 12 صف هيفضلوا 12.'
+    ]),
+    H('أنواع الـ Joins بسرعة'),
+    T(['النوع','بيرجع إيه'],[
+      ['Inner','الصفوف المشتركة بس بين الجدولين'],
+      ['Left','كل صفوف الجدول الشمال، ومعاها المطابق من اليمين'],
+      ['Right','كل صفوف الجدول اليمين، ومعاها المطابق من الشمال'],
+      ['Full Outer','كل صفوف الجدولين، والفاضي يفضل فاضي']
+    ]),
+    H('Data Interpreter والتنضيف الخفيف'),
+    P('لو الملف فيه صفوف فاضية أو عناوين مكررة زي ما بيحصل في ملفات Excel الحقيقية، زرار `Use Data Interpreter` على الشمال بيحاول ينضفها لوحده. في ملفات الكورس مش محتاجينه، بس اعرف مكانه.'),
+    W('خلي بالك من مكان الملفات على جهازك. Tableau بيفتكر مسار الملف، ولو نقلته أو اتمسح هيطلب منك تحدد مكانه تاني. الأفضل فولدر ثابت لكل مشروع.'),
+    P('لما تخلص، اضغط على تاب `Sheet 1` تحت عشان تروح للـ Workspace. ده اللي هنتكلم عنه في الدرس الجاي.')
+  ],
+  quiz:[
+    Q('ملف CSV بتوصله في Tableau من خلال:',['Microsoft Excel','Text file','PDF'],1,'الـ CSV ملف نصي بفواصل، فبيتحط تحت Text file في قايمة Connect.'),
+    Q('صفحة Data Source بتتكون من:',['Canvas فوق و Data Grid تحت','Charts بس','متصفح إنترنت'],0,'الـ Canvas مكان سحب الجداول وعمل العلاقات، والـ Data Grid بيعرض عينة من الصفوف عشان تراجع الداتا.'),
+    Q('عندك 12 طلب في جدول المبيعات، وكل منتج فيهم موجود في جدول المنتجات. لو عملت Inner Join على product_name هيبقى عندك كام صف؟',['أقل من 12','12 بالظبط','أكتر من 12'],1,'Inner Join بياخد المطابق بس، وطالما كل منتج في المبيعات له مطابق، مفيش صف هيتشال.'),
+    Q('الأيقونة `#` فوق عمود في الـ Data Grid معناها:',['العمود نص','العمود رقم','العمود تاريخ'],1,'علامة # بتدل على Numeric. النص Abc والتاريخ أيقونة تقويم، والجغرافيا أيقونة كرة أرضية.')
+  ],
+  exercises:[
+    X('وصّل `sales_data.csv` في Tableau Public وافتح صفحة Data Source. عد الصفوف والأعمدة في الـ Grid.','','12 صف و9 أعمدة. لو طلع رقم مختلف، راجع إن الملف هو بتاع الكورس ومتكررش مرتين على الـ Canvas.'),
+    X('اسحب `products.csv` جنب sales_data واتأكد إن الربط على `product_name`. كام عمود بقى في الـ Grid دلوقتي؟','','12 عمود: التسعة بتاعة المبيعات زائد unit_price و supplier (عمود product_name التاني بيكون مكرر فممكن تخفيه).'),
+    X('غيّر نوع الـ Join من Inner لـ Left. عدد الصفوف اتغير؟ ليه؟','','فضل 12، لأن كل صف في المبيعات له مطابق في المنتجات أصلاً. الفرق هيظهر بس لو فيه منتج في المبيعات مش موجود في جدول المنتجات.'),
+    X('غيّر نوع عمود `order_date` لـ Date من أيقونة العمود. ليه ده مهم؟','','علشان Tableau يعرف يعمل تريند زمني ويرتب الشهور صح ويطلع مستويات زي السنة والشهر من التاريخ لوحده.')
+  ]
+});
+
+CURRICULUM.push({
+  id:'workspace',
+  nav:'الـ Workspace: الخريطة الذهنية',
+  title:'الدرس 4: الـ Workspace: الرفوف والبطاقات والـ Pills',
+  subtitle:'مكان كل حاجة في الشاشة، وإيه اللي بيحصل لما تسحب حقل',
+  blocks:[
+    P('أول ما تفتح Sheet هتحس إن الشاشة مليانة حاجات، بس الحقيقة فيها 4 مناطق بس لازم تحفظهم:'),
+    L([
+      '`Data pane` على الشمال: فيها جداولك وحقولك مقسومة Dimensions فوق و Measures تحت.',
+      '`Shelves`: رفوف الصفحة نفسها، وأهمها `Columns` فوق و `Rows` تحت. اللي بتحطه هنا بيرسم المحاور.',
+      '`Marks card` في النص: بطاقة فيها Color و Size و Label و Detail و Tooltip. دي بتتحكم في شكل العلامات (النقط والأعمدة) نفسها.',
+      '`Show Me` زرار فوق على اليمين: بيفتح قايمة الـ Charts الجاهزة وبيختار منها اللي يناسب الحقول اللي اخترتها.'
+    ]),
+    H('الـ Pills'),
+    P('لما تسحب حقل من الـ Data pane لأي Shelf بيتحول لكبسولة ملونة اسمها `Pill`. لونها بيقولك معلومة مهمة: أزرق يعني Discrete (قيم منفصلة زي أسماء)، وأخضر يعني Continuous (مدى متصل زي الأرقام والتواريخ). هنتعمق في ده الدرس اللي بعده.'),
+    H('تجربة بإيدك في دقيقة'),
+    L([
+      'اسحب `city` على رف `Rows`: ظهر صف لكل مدينة.',
+      'اسحب `revenue` على رف `Columns`: Tableau جمع الإيراد لكل مدينة ورسم أعمدة أفقية.',
+      'اسحب `category` على `Color` في الـ Marks card: الأعمدة اتلونت حسب الفئة.',
+      'دوس على أيقونة `Label` واختار `Show mark labels`: القيم ظهرت على الأعمدة.'
+    ]),
+    N('لاحظ إن Tableau عمل `SUM(revenue)` لوحده. أي Measure بتحطه بيتجمع تلقائياً، والتجميعة الافتراضية SUM. تقدر تغيرها بالضغط يمين على الـ Pill واختيار Measure.'),
+    H('أزرار هتستخدمها كل يوم'),
+    L([
+      '`Undo`: زرار الرجوع فوق، وبيفتكر خطوات كتير جداً. جرب براحتك، مفيش حاجة هتبوظ.',
+      '`Swap Rows and Columns`: بيقلب المحاور.',
+      '`Sort`: فرز تصاعدي أو تنازلي حسب القيم.',
+      '`Fit` من شريط الأدوات: بيخلي الرسمة تملى المساحة (اختار Entire View).',
+      'علامة `+` جنب الـ Tabs: Sheet جديدة.'
+    ]),
+    H('Sheet و Dashboard و Story'),
+    P('الـ `Worksheet` هي صفحة الرسم الواحدة. الـ `Dashboard` بيجمع كذا Sheet في شاشة واحدة. والـ `Story` بيعرض Dashboards ورا بعض زي شرايح. هنبني التلاتة في الكورس بالترتيب.'),
+    W('كل حاجة في Tableau بتتعمل بالسحب والإفلات، ومفيش زرار "طبق". لو حصل حاجة غريبة، الحل دايماً: Undo أو اسحب الـ Pill بره الرف عشان ترميه.')
+  ],
+  quiz:[
+    Q('حطيت حقل على رف Columns. إيه اللي بيحصل؟',['بيتحذف من الداتا','بيرسم محور أفقي بناءً على الحقل ده','بيتحفظ كفلتر'],1,'رفوف Rows و Columns بترسم هيكل الرسمة: اللي على Columns يبني المحور الأفقي واللي على Rows الرأسي.'),
+    Q('الـ Marks card بتتحكم في:',['مصادر الداتا','شكل العلامات: اللون والحجم والنص والـ Tooltip','حفظ الملف'],1,'كل ما يخص مظهر العلامات نفسها (أعمدة، نقط، خطوط) بيتظبط من الـ Marks card.'),
+    Q('سحبت revenue على الرسمة فظهر SUM(revenue). ليه؟',['غلطة في البرنامج','لأن أي Measure بيتجمع تلقائياً، والافتراضي SUM','لأن revenue نص'],1,'Tableau بيجمع الـ Measures تلقائياً حسب الـ Dimensions الموجودة في الرسمة، وتقدر تغير التجميعة من قائمة الـ Pill.'),
+    Q('عايز تختار Chart جاهز يناسب الحقول اللي حددتها بسرعة. تستخدم:',['Data Interpreter','Show Me','Pages shelf'],1,'Show Me بيعرض أنواع الـ Charts اللي تناسب اختيارك وبيبنيها بضغطة.'),
+  ],
+  exercises:[
+    X('اعمل الرسمة اللي في الدرس: city على Rows و revenue على Columns، وسجل بإيدك إجمالي إيراد كل مدينة من الـ Labels.','','Cairo حوالي 20000، Giza حوالي 8500، Alexandria حوالي 30500. دي نفس الأرقام اللي هتلاقيها في المعمل وفي باقي مواقع السلسلة.'),
+    X('اضغط زرار Swap وشوف الرسمة اتقلبت إزاي. أنهي اتجاه أريح للقراءة في حالة المدن دي؟','','الأعمدة الأفقية أريح هنا لأن أسماء المدن بتتقري كاملة على محور الصفوف.'),
+    X('اسحب revenue على `Color` بدل category. إيه اللي اتغير في الأعمدة؟','','اللون بقى تدرج حسب قيمة الإيراد: كل ما الإيراد يعلى اللون يغمق (أو يتدرج حسب الـ Palette).'),
+    X('افتح Show Me وحوّل الرسمة لـ Text Table (الجدول النصي). إيه الفرق في العرض؟','','بدل الأعمدة بقى عندك جدول: المدن في صفوف والقيم مكتوبة. نفس الداتا، عرض مختلف.')
+  ]
+});
+
+CURRICULUM.push({
+  id:'dims-measures',
+  nav:'Dimensions و Measures',
+  title:'الدرس 5: Dimensions و Measures: أهم فرق في Tableau كله',
+  subtitle:'أزرق وأخضر، منفصل ومتصل: لو فهمت ده فهمت Tableau',
+  blocks:[
+    P('افتح الـ Data pane وهتلاقي الحقول متقسمة قسمين بخط فاصل: فوق الـ `Dimensions` وتحت الـ `Measures`. التقسيمة دي مش شكل، دي الطريقة اللي Tableau بيفكر بيها، وأي حاجة هتعملها مبنية عليها.'),
+    H('الـ Dimensions'),
+    P('الـ Dimensions حقول وصفية بتقطع الداتا لمجموعات: اسم المدينة، اسم العميل، الفئة، التاريخ. قيمتها غالباً نصوص، ووظيفتها إنها تجاوب على سؤال "حسب إيه؟". لما تحط Dimension في الرسمة بيطلع عنوان لكل قيمة من قيمه: صف لكل مدينة، عمود لكل فئة.'),
+    H('الـ Measures'),
+    P('الـ Measures حقول رقمية بتتحسب وتتجمع: الإيراد، التكلفة، الكمية. وظيفتها تجاوب على سؤال "قد إيه؟". Tableau بيجمعها تلقائياً حسب الـ Dimensions اللي حواليها: حطيت city بس، هيجمع الإيراد لكل مدينة. مفيش Dimensions خالص، هيجمع الجدول كله.'),
+    N('القاعدة السحرية: الـ Measures بتتجمع على مستوى الـ Dimensions الموجودة في الرسمة. غيّرت الـ Dimensions، نفس الـ Measure يتجمع من تاني. جرب ده في المعمل باختيار Rows مختلفة.'),
+    H('أزرق وأخضر: Discrete و Continuous'),
+    P('الـ Pill الأزرق يعني Discrete: قيم منفصلة بتاخد عنوان مستقل لكل واحدة (زي أسماء المدن). الـ Pill الأخضر يعني Continuous: مدى متصل بيرسم محور رقمي (زي SUM(revenue)). غالباً الـ Dimensions زرقا والـ Measures خضرا، بس مش دايماً: التاريخ Dimension بس لما يتحط أخضر (زي MONTH متصل) بيرسم تريند زمني نضيف.'),
+    T(['','Dimension','Measure'],[
+      ['سؤاله','حسب إيه؟','قد إيه؟'],
+      ['أمثلة','city و category و customer','revenue و cost و quantity'],
+      ['في الرسمة','عناوين ومحاور مقسمة','أرقام متجمعة (SUM غالباً)'],
+      ['لونه غالباً','أزرق (Discrete)','أخضر (Continuous)']
+    ]),
+    H('حقول Tableau بيصنعها لوحده'),
+    L([
+      '`Measure Names` و `Measure Values`: حقلين جاهزين بيلموا كل الـ Measures مع بعض، بيفيدوا لما تعايز تعرض أكتر من رقم في نفس الرسمة.',
+      '`Number of Records`: بيعد صفوف الداتا (عندنا 12).',
+      'حقول التاريخ الفرعية: من عمود التاريخ بيقدر يطلع YEAR و QUARTER و MONTH كـ Pills جاهزة.'
+    ]),
+    H('تغيير التجميعة'),
+    P('اضغط يمين على Pill بتاع Measure واختار `Measure` وهتلاقي SUM و AVG و Median و Count و Count (Distinct) و MIN و MAX. نفس الحقل ممكن يرويك قصص مختلفة: SUM(revenue) الإجمالي، AVG(revenue) متوسط قيمة الطلب.'),
+    W('لو رقم طلع غريب، أول حاجة بص عليها: أنهي تجميعة على الـ Pill؟ وإيه الـ Dimensions اللي في الرسمة؟ 90% من "الأرقام الغلط" في Tableau سببهم الاتنين دول.')
+  ],
+  quiz:[
+    Q('أنهي واحد من دول Measure؟',['city','customer','quantity'],2,'quantity حقل رقمي بيتجمع. المدينة والعميل أوصاف بتقطع الداتا، يعني Dimensions.'),
+    Q('حطيت city على Rows و SUM(revenue) على Text. إيه اللي هيظهر؟',['إجمالي إيراد الجدول كله','إجمالي الإيراد لكل مدينة لوحدها','عدد الطلبات'],1,'الـ Measure بيتجمع على مستوى الـ Dimensions الموجودة: كل قيمة city بتاخد مجموعها.'),
+    Q('الـ Pill الأخضر في Tableau يعني:',['Discrete','Continuous','فلتر'],1,'الأخضر Continuous بيرسم محور متصل، والأزرق Discrete بيرسم عناوين منفصلة.'),
+    Q('عايز متوسط قيمة الطلب بدل إجمالي الإيراد. تعمل إيه؟',['تمسح الحقل','تغير التجميعة على الـ Pill من SUM لـ AVG','تعمل Sheet جديدة'],1,'يمين على Pill الـ Measure ثم Measure ثم AVG، ونفس الرسمة هتتحدث بالمتوسط.')
+  ],
+  exercises:[
+    X('في Sheet جديد حط category على Rows و revenue على Columns، وبعدين غيّر التجميعة لـ AVG. اكتب القيمتين.','','SUM: Tech حوالي 39300 و Furniture حوالي 19700. AVG: متوسط الطلب في Tech = 39300 على 6 طلبات = 6550، وفي Furniture = 19700 على 6 = حوالي 3283. ممكن تتأكد من SUM في المعمل.'),
+    X('من المعمل: شغّل `SUM([revenue])` مرة من غير Rows، ومرة و city على الـ Rows shelf. قارن النتايج.','','من غير Rows: رقم واحد 59000. مع city: تلات قيم 20000 و 8500 و 30500 مجموعهم 59000. دي قاعدة "التجميع حسب الـ Dimensions" شغالة قدامك.'),
+    X('لقيت Pill لونه أخضر بس بيعرض عناوين منفصلة لكل سنة. ممكن تكون الحالة دي إزاي؟','','ده تاريخ Continuous بس مستوى العرض YEAR، فبيظهر عنوان لكل سنة على محور متصل. اللون بيحدد السلوك مش نوع العنوان.'),
+    X('في جملة: ليه Tableau بيفرق بين Dimensions و Measures أصلاً؟','','علشان يعرف إزاي يبني الرسمة: الـ Dimensions بتحدد التقسيمة والمحاور، والـ Measures بتحسب الأرقام اللي بتترسم جوه التقسيمة دي.')
+  ]
+});
+
+CURRICULUM.push({
+  id:'charts',
+  nav:'أول Charts',
+  title:'الدرس 6: أول Charts: الأعمدة والخط والـ Scatter',
+  subtitle:'أنهي Chart لأنهي سؤال، وإزاي تفرز وتعلّم على القيم',
+  blocks:[
+    P('دلوقتي عندك كل اللي محتاجه عشان ترسم. القاعدة قبل أي Chart: اسأل نفسك "السؤال إيه؟" وبعدين اختار الشكل اللي بيجاوب عليه، مش العكس.'),
+    H('أعمدة (Bar): المقارنة بين فئات'),
+    L([
+      'السؤال: مين أعلى؟ أنهي فئة أكبر؟',
+      'اسحب Dimension زي `product_name` على Rows و Measure زي `revenue` على Columns.',
+      'دوس زرار `Sort` التنازلي: ترتيب من الأعلى للأقل بيخلي الإجابة تبان فوراً.',
+      'في داتتنا: Laptop على القمة بإجمالي 37500، وراه Desk بـ 13500.'
+    ]),
+    H('خط (Line): التريند عبر الزمن'),
+    L([
+      'السؤال: بيزيد ولا بيقل عبر الوقت؟',
+      'اسحب `order_date` على Columns: Tableau هيطلعه YEAR في الأول. اضغط `+` على الـ Pill عشان تنزل لـ MONTH.',
+      'اسحب `revenue` على Rows: خط بيعرض يناير 14500، فبراير 19000، مارس 17600، أبريل 7900.'
+    ]),
+    N('الخط المناسب للزمن لأن العين بتتبع الاتجاه. لو حطيت فئات مش مترتبة على محور خطي، هيطلع شكل ملخبط ومضلل.'),
+    H('Scatter: العلاقة بين رقمين'),
+    L([
+      'السؤال: فيه علاقة بين حاجتين؟ زي الكمية والإيراد لكل طلب.',
+      'حط `quantity` على Columns و `revenue` على Rows.',
+      'من الـ Marks card اختار `Circle`، واسحب `order_id` على `Detail` عشان كل طلب يبقى نقطة لوحده.'
+    ]),
+    H('Pie: استخدمه بحذر'),
+    P('الـ Pie بيعرض نسبة من كل، بس العين البشرية وحشة جداً في مقارنة الزوايا. فئتين تلاتة كتير أوي؟ لسه ماشي. أكتر من كده؟ الأعمدة أحسن دايماً. في الشغل الحقيقي هتلاقي ناس كتير بتقول "ممنوع Pie"، والسبب ده.'),
+    H('Show Me بيختار عنك'),
+    P('حدد الحقول اللي عايزها (اضغط Ctrl ودوس عليها في الـ Data pane) وافتح `Show Me`: الأنواع اللي تناسب اختيارك بتنور، وكل نوع مكتوب تحته محتاج إيه. مثلاً `filled map` محتاج حقل جغرافي، و`line` محتاج تاريخ.'),
+    H('الفرز والتعليم على القيم'),
+    L([
+      '`Sort`: من زرار الفرز في الشريط أو يمين على محور الـ Dimension.',
+      '`Label` في الـ Marks card: فعّل Show mark labels عشان تكتب القيم على الرسمة.',
+      '`Tooltip`: النص اللي بيظهر لما تقف بالماوس على علامة. حط فيه تفاصيل تانية زي الربح والكمية.',
+      'يمين على أي محور و `Edit Axis`: تغير العنوان والتنسيق.'
+    ]),
+    W('متحطش Labels على رسمة فيها مئات العلامات: الشكل بيتزحم ويبوظ. Labels للرسوم القليلة، والـ Tooltip للتفاصيل.')
+  ],
+  quiz:[
+    Q('عايز تعرض تريند الإيراد عبر شهور 2025. أنسب Chart؟',['Pie','Line','Scatter'],1,'الخط هو الأنسب للتريند الزمني: محور أفقي فيه الشهور وخط بينقل الارتفاع والانخفاض.'),
+    Q('عايز تقارن إيراد 4 منتجات. الأوضح غالباً:',['Pie بـ 4 قطع','Bar Chart مفروز تنازلي','جدول نصي كبير'],1,'الأعمدة المفروزة بتخلي الترتيب والفرق بين القيم واضح فوراً، والعين بتقارن أطوال أدق من الزوايا.'),
+    Q('ليه الـ Pie بيت criticized كتير؟',['لأنه صعب يترسم','لأن العين بتقارن الأطوال والمواضع أدق من الزوايا والمساحات','لأنه مش موجود في Tableau'],1,'مقارنة الزوايا والمساحات صعبة على العين، فالفروق الصغيرة بتضيع. الأعمدة بتحل نفس المشكلة أدق.'),
+    Q('حطيت quantity على Rows و revenue على Columns وطلعت نقطة واحدة بس. إيه الناقص؟',['Dimension على Detail عشان تتقسم النقط','Chart تاني','فلتر'],0,'من غير Dimension في الرسمة Tableau بيجمع كل الصفوف في نقطة واحدة. حط order_id أو customer على Detail فتتقسم.')
+  ],
+  exercises:[
+    X('اعمل Bar لإيراد المنتجات مفروز تنازلي وفعّل الـ Labels. اكتب الترتيب والقيم.','','Laptop بـ 37500، Desk بـ 13500، Chair بـ 6200، Mouse بـ 1800. المجموع 59000 زي ما هتتأكد في المعمل.'),
+    X('اعمل Line لتريند الإيراد الشهري. أنهي شهر القمة وأنهي شهر القاع؟','','القمة فبراير بـ 19000، والقاع أبريل بـ 7900 (مع إن أبريل لسه فيه 4 أيام بس في الداتا، فده مش حكم على أداء حقيقي).'),
+    X('من المعمل: جرب `AVG([revenue])` وشيلها لـ Rows = category. اكتب متوسط الطلب لكل فئة.','','Tech: 6550 و Furniture: حوالي 3283.33. متوسط الطلب في Tech ضعف Furniture تقريباً، مع إن عدد الطلبات متساوي (6 و 6).'),
+    X('اعمل Scatter بين quantity و revenue و order_id على Detail. فيه طلب شاذ عن الباقي؟','','أغلب الطلبات كمية 1 أو 2 بإيراد صغير، وفي 3 طلبات كمية 1 بإيراد ضخم (12000 و 13000 و 12500) وهي طلبات الـ Laptop. دي النقط اللي بتشد العين.')
+  ]
+});
+
+CURRICULUM.push({
+  id:'maps',
+  nav:'الخرايط',
+  title:'الدرس 7: الخرايط: لما المكان نفسه هو السؤال',
+  subtitle:'Geographic Roles و Symbol Maps و Filled Maps على مدن مصر',
+  blocks:[
+    P('لما الداتا فيها أماكن، الخريطة بتجاوب سؤال "فين؟" في ثانية واحدة. Tableau شاطر جداً في الخرايط: بيعرف أسماء الدول والمحافظات والمدن الكبيرة لوحده، وبيرسمها من غير ما تكتب إحداثيات.'),
+    H('الـ Geographic Role'),
+    P('عشان Tableau يعامل حقل كأنه مكان، لازم يكون ليه `Geographic Role`. اضغط يمين على `city` في الـ Data pane، واختار `Geographic Role` ثم `City`. الأيقونة جنب الاسم هتبقى كرة أرضية. أسماء المدن في داتتنا بالإنجليزي (Cairo و Giza و Alexandria) عشان Tableau يعرفها بسهولة.'),
+    N('لو Tableau مش لاقي اسم مكان، بيظهر مؤشر تحت على اليمين "unknown". اضغط عليه وصحح التعريف يدوي: غالباً المشكلة اختلاف إملائي أو إن المدينة صغيرة ومحتاجة تحدد الدولة الأول من خيار Country في نفس القايمة.'),
+    H('Symbol Map في 30 ثانية'),
+    L([
+      'دوس دبل كليك على `city`: Tableau هيحط Longitude و Latitude لوحده ويرسم نقطة لكل مدينة على خريطة.',
+      'اسحب `revenue` على `Size` في الـ Marks card: حجم الدائرة بقى على قد الإيراد.',
+      'اسحب `revenue` على `Color` كمان: اللون بيتدرج مع القيمة.',
+      'في داتتنا: أكبر دائرة هتكون Alexandria بـ 30500، وبعدين Cairo بـ 20000، وأصغرها Giza بـ 8500.'
+    ]),
+    H('Filled Map'),
+    P('الـ Filled Map بيلون المنطقة نفسها بدل نقطة. من `Show Me` اختار الـ Filled Map بعد ما تحدد الحقل الجغرافي والـ Measure. بس خلي بالك: المساحات الملونة بتناسب مستوى المحافظات والدول، مش المدن. مدننا التلاتة هتفضل أوضح كـ Symbol Map.'),
+    H('طبقات الخريطة'),
+    L([
+      'من قائمة `Map` فوق اختار `Map Layers`: تظهر أو تخفي الشوارع والحدود والتضاريس.',
+      '`Background Maps`: تغير شكل الخريطة نفسها (فاتح، غامق، قمر صناعي).',
+      'تقدر تزوم وتتحرك في الخريطة بالماوس عادي، ومن سهم الأدوات على الشمال تقدر تحدد منطقة.'
+    ]),
+    W('الخريطة بتتحمل من الإنترنت. لو النت فصل هتلاقي مربعات رمادية. ولو عايز تشتغل أوفلاين كتير، فيه خيار Offline Maps من نفس قائمة Map.'),
+    H('إمتى الخريطة فكرة وحشة؟'),
+    P('لو عندك مدينتين تلاتة بس والسؤال "مين أعلى"، Bar Chart أسرع في القراءة من خريطة. الخريطة بتكسب لما يكون التوزيع الجغرافي نفسه هو الموضوع: تجمعات، مناطق فاضية، انتشار.')
+  ],
+  quiz:[
+    Q('عشان حقل city يرسم على خريطة لازم تعمله:',['فلتر','Geographic Role = City','Calculated Field'],1,'الـ Geographic Role بيخلي Tableau يعامل القيم كأماكن ويجيب لها إحداثيات من قاعدة بياناته الجغرافية.'),
+    Q('في Symbol Map، حطيت revenue على Size. معناه إيه؟',['المدن هتتلون','حجم الدائرة على كل مدينة هيكبر بزيادة الإيراد','الخريطة هتزوم'],1,'الـ Size بيحول قيمة الـ Measure لحجم العلامة، فالمدينة الأعلى إيراد تاخد أكبر دائرة.'),
+    Q('ظهر مؤشر "unknown" على الخريطة. السبب الأرجح؟',['النت فصل','Tableau مش قادر يتعرف على اسم مكان أو أكتر','الداتا اتلغت'],1,'أسماء الأماكن اللي مش متعرف عليها بتتعلم كـ unknown، وبتحلها بتصحيح التعريف يدوي أو تحديد الدولة.'),
+    Q('عندك مبيعات 3 مدن بس وسؤالك "مين الأعلى؟". الأفضل:',['خريطة عالم كاملة','Bar Chart مفروز','Pie'],1,'مع عدد أماكن صغير وسؤال مقارنة مباشر، الأعمدة بتجاوب أسرع وأدق من الخريطة.')
+  ],
+  exercises:[
+    X('اعمل Symbol Map للمدن التلاتة والإيراد على Size و Color. رتب المدن حسب حجم الدائرة.','','Alexandria الأكبر (30500)، بعدها Cairo (20000)، وأصغر واحدة Giza (8500).'),
+    X('من قائمة Map ثم Background Maps جرب الشكل الغامق (Dark). إمتى الخلفية الغامقة ممكن تكون أحسن؟','','لما الـ Dashboard كله غامق أو لما تكون العلامات ألوانها فاتحة، التباين بيبقى أعلى والرسمة أريح للعين.'),
+    X('ليه المدن في داتا الكورس مكتوبة بالإنجليزي مش بالعربي؟ جرب تعمل نسخة بالعربي وشوف إيه اللي هيحصل.','','التعريف الجغرافي في Tableau أدق مع الأسماء الإنجليزية الرسمية. الأسماء العربية ممكن تتحط unknown وتحتاج تصحيح يدوي لكل قيمة.'),
+    X('اعمل Filled Map على مستوى Country (مصر كلها) بالإيراد. إيه رأيك في الرسمة دي كإجابة على سؤال "فين بنبيع؟"','','مضللة: داتتنا كله في مصر، فهتلون الدولة كلها بلون واحد ومش هتقول أي معلومة. المستوى الجغرافي لازم يكون على قد التفصيلة اللي في الداتا.')
+  ]
+});
+
+CURRICULUM.push({
+  id:'calcs',
+  nav:'Calculated Fields',
+  title:'الدرس 8: Calculated Fields: لما الحقل اللي عايزه مش موجود',
+  subtitle:'الربح والهامش والشروط: IF و SUM و COUNTD بصيغة Tableau',
+  blocks:[
+    P('في داتتنا مفيش عمود ربح. بس عندنا الإيراد والتكلفة، والربح = الإيراد ناقص التكلفة. بدل ما نروح نعدل الملف، بنعمل `Calculated Field`: حقل جديد بيتحسب من صيغة بتكتبها، وبيتعامل زي أي حقل تاني في السحب والإفلات.'),
+    H('تعمله إزاي'),
+    L([
+      'يمين في مكان فاضي في الـ Data pane واختار `Create Calculated Field`.',
+      'اكتب الاسم فوق (مثلاً Profit) والصيغة تحت.',
+      'أسماء الحقول بتتحط بين أقواس مربعة: `[revenue]`.',
+      'لو الصيغة صح هتلاقي تحت "The calculation is valid." واضغط OK.'
+    ]),
+    C('[revenue] - [cost]'),
+    P('الصيغة دي Row-level: بتتحسب لكل صف لوحده. لما تحط Profit في الرسمة Tableau هيجمع نتايج الصفوف: SUM(Profit) في داتتنا = 14930. جربها في المعمل: `SUM([profit])` بيحسب نفس القيمة (المعمل بيجهزلك حقل profit جاهز بنفس المنطق).'),
+    H('نوعين من الحسابات'),
+    L([
+      'Row-level: بتتحسب صف بصف قبل أي تجميع، زي `[revenue] - [cost]`.',
+      'Aggregate: بتتحسب على القيم المتجمعة، زي `SUM([profit]) / SUM([revenue])`. الفرق مهم جداً في الهامش: هامش الإجماليات الصح = 14930 على 59000 = حوالي 25.31%.'
+    ]),
+    C('SUM([profit]) / SUM([revenue])'),
+    H('الشروط: IF و THEN و END'),
+    P('أقوى حاجة في الـ Calculations إنك تحسب شرطياً. مثلاً إيراد القاهرة بس:'),
+    C("SUM(IF [city] = 'Cairo' THEN [revenue] END)"),
+    P('الـ IF جوه الـ SUM بتتفذ صف بصف: لو الصف في القاهرة خد الإيراد، غير كده متاخدش حاجة، وبعدين الـ SUM يجمع. النتيجة في داتتنا 20000. ولاحظ إن النصوص في Tableau بتتحط بين علامتي تنصيص مفردة.'),
+    N('في ELSE اختياري: `IF [quantity] >= 2 THEN \'جملة\' ELSE \'قطاعي\' END` بيصنف كل طلب. وللحالات السريعة فيه `IIF(شرط, قيمة لو صح, قيمة لو غلط)` في سطر واحد.'),
+    H('دوال هتستخدمها كتير'),
+    T(['الدالة','بتعمل إيه'],[
+      ['SUM و AVG و MIN و MAX','تجميع رقمي عادي'],
+      ['COUNT','تعد القيم الموجودة (الصفوف)'],
+      ['COUNTD','تعد القيم المختلفة: COUNTD([customer]) عندنا = 5'],
+      ['IIF','شرط سريع في سطر واحد'],
+      ['AND و OR و NOT','ربط شروط مع بعض']
+    ]),
+    H('Quick Table Calculations'),
+    P('يمين على أي Pill خضرا واختار `Quick Table Calculation`: نسبة من الإجمالي، Running Total، Rank. دي حسابات بتتعمل على نتايج الرسمة نفسها، وبيها تجاوب أسئلة زي "كل مدينة نسبتها كام في المية من الإجمالي؟" من غير ما تكتب صيغة.'),
+    W('أشهر غلطة: تنسى الـ SUM حوالين الحقول لما تقسم تجميع على تجميع. `[profit] / [revenue]` هيرفضها Tableau في سياق التجميع ويطلب تحدد. الحل: `SUM([profit]) / SUM([revenue])`.'),
+    P('جرب كل صيغ الدرس ده في المعمل: هو بيفهم نفس الصياغة بالظبط، وبيقولك لو فيه غلط إملائي بالعربي.')
+  ],
+  quiz:[
+    Q('عملت Calculated Field اسمه Profit بصيغة [revenue] - [cost]. ده نوعه:',['Aggregate','Row-level','Table Calculation'],1,'صيغة من غير دوال تجميع بتتفذ صف بصف، والتجميع بيحصل بعدين في الرسمة (SUM(Profit)).'),
+    Q('إيه الصيغة الصح لهامش الربح الإجمالي؟',['[profit] / [revenue]','SUM([profit]) / SUM([revenue])','AVG([profit])'],1,'الهامش الصح بيتحسب من الإجماليات: مجموع الربح على مجموع الإيراد = 14930/59000 حوالي 25.31%.'),
+    Q("SUM(IF [city] = 'Cairo' THEN [revenue] END) بتحسب إيه؟",['عدد طلبات القاهرة','إيراد طلبات القاهرة بس','كل الإيراد'],1,'الـ IF بيفلتر على مستوى الصف جوه التجميعة: بس صفوف القاهرة بتدخل في المجموع، والنتيجة 20000.'),
+    Q('الفرق بين COUNT و COUNTD:',['مفيش فرق','COUNT تعد الصفوف و COUNTD تعد القيم المختلفة','COUNTD أسرع'],1,'COUNT([customer]) = 12 (كل صف فيه عميل)، COUNTD([customer]) = 5 (العملاء المختلفين بس).'),
+    Q('عايز نسبة كل مدينة من إجمالي الإيراد من غير ما تكتب صيغة. تستخدم:',['Parameter','Quick Table Calculation من نوع Percent of Total','Join جديد'],1,'يمين على Pill الـ Measure ثم Quick Table Calculation ثم Percent of Total بيحسب النسب على نتايج الرسمة مباشرة.')
+  ],
+  exercises:[
+    X('اعمل Calculated Field اسمه Profit بالصيغة اللي في الدرس، وحطه جنب revenue في Text Table حسب city. كام ربح القاهرة؟','','ربح القاهرة 5130 (إيراد 20000 ناقص تكلفة 14870). في المعمل: SUM(IF [city]=\'Cairo\' THEN [profit] END).'),
+    X('اعمل Calculated Field اسمه Profit Ratio بالصيغة SUM([profit])/SUM([revenue]) واعرضه كنسبة (يمين على الحقل ثم Default Properties ثم Number Format ثم Percentage).','','النسبة حوالي 25.31%. التنسيق كنسبة بيخلي العرض أوضح من رقم عشري.'),
+    X('في المعمل: اكتب صيغة تطلع إيراد طلبات Giza بس، وتأكد إن الناتج 8500.','','SUM(IF [city] = \'Giza\' THEN [revenue] END). لازم النص بين تنصيص مفرد والإملائي يطابق القيمة بالظبط.'),
+    X('اكتب Calculated Field بيصنف الطلب: لو quantity أكبر من أو تساوي 2 يبقى "Bulk" غير كده "Single". كام طلب Bulk في الداتا؟','','IF [quantity] >= 2 THEN \'Bulk\' ELSE \'Single\' END. عدد الـ Bulk = 3 طلبات (رقم 3 و 7 و 11، كل واحد كمية 2). تقدر تتأكد بعدّ الصفوف من الـ Data Grid.')
+  ]
+});
+
+CURRICULUM.push({
+  id:'filters-params',
+  nav:'الفلاتر والـ Parameters',
+  title:'الدرس 9: الفلاتر والـ Parameters: خلي المستخدم يسأل بنفسه',
+  subtitle:'Quick Filters و Top N و Parameter يغير الحساب من Dropdown',
+  blocks:[
+    P('الـ Dashboard الكويس مش بيجاوب على سؤال واحد، بيخلي اللي قدامه يسأل أسئلته بنفسه. دي وظيفة الفلاتر: تديله أزرار يضيق بيها الداتا، والـ Parameters: متغيرات يدخلها هو فتغير الحساب نفسه.'),
+    H('أنواع الفلاتر'),
+    L([
+      'فلتر Dimension: اسحب `city` على رف `Filters` واختار المدن اللي عايزها. بيفلتر على مستوى القيم.',
+      'فلتر Measure: اسحب `revenue` على `Filters` وحدد مدى رقمي، مثلاً الطلبات فوق 5000 (عندنا 3 منهم).',
+      'فلتر تاريخ: اسحب `order_date` واختار فترة زمنية أو شهور معينة.'
+    ]),
+    H('Show Filter: خليها للمستخدم'),
+    P('يمين على أي حقل واختار `Show Filter`: هيطلع كارت فلتر على يمين الرسمة يقدر اللي بيتفرج يعلم ويشيل منه بنفسه. تقدر تغير شكله من السهم الصغير فوق الكارت: قايمة اختيار واحد، اختيار متعدد، Dropdown، أو بحث.'),
+    N('الفلتر بيشتغل على الـ Sheet اللي اتعمل فيها بس. لما نبني Dashboard هنتعلم نخلي فلتر واحد يأثر على كل الرسوم (Apply to Worksheets).'),
+    H('Top N: أعلى كام؟'),
+    P('عايز أعلى 5 عملاء بس؟ اسحب `customer` على `Filters`، ومن تاب `Top` اختار `By field`، واكتب 5، واختار `revenue` بـ `SUM`. Tableau هيرتب وهيجيب الخمسة الأوائل. في داتتنا العملاء 5 أصلاً، فجرب Top 3: Mona (30500) و Aya (16700) و Omar (5000).'),
+    H('الـ Parameters'),
+    P('الـ Parameter متغير قيمته بيحددها المستخدم من Dropdown أو Slider، وتقدر تستخدمه جوه الصيغ والفلاتر. مثال كلاسيكي: Parameter اسمه "هدف الإيراد" قيمته رقم، وCalculated Field بيقارن كل مدينة بالهدف:'),
+    C("IF SUM([revenue]) >= [Target] THEN 'عدى الهدف' ELSE 'تحت الهدف' END"),
+    L([
+      'تعمله من يمين في الـ Data pane ثم `Create Parameter`.',
+      'حدد نوعه (رقم، نص، تاريخ) والقيم المسموحة (كل القيم، قايمة، أو مدى).',
+      'يمين عليه و `Show Parameter`: يظهر كارت تحته المستخدم يغير منه القيمة.',
+      'استخدمه في Calculated Field أو في فلتر Top N بدل الرقم الثابت.'
+    ]),
+    H('ترتيب تنفيذ الفلاتر'),
+    P('Tableau بينفذ الفلاتر في ترتيب معين: فلاتر الـ Data Source الأول، بعدين فلاتر الـ Context، بعدين فلاتر الـ Dimensions، بعدين الـ Measures، وأخيراً الـ Table Calculations. ليه يهمك؟ لأن Top N بيتحسب جوه فلاتر الـ Dimensions: لو عايز "أعلى 5 عملاء في القاهرة بس" لازم فلتر المدينة يبقى Context Filter (يمين عليه ثم `Add to Context`) عشان يتنفذ الأول.'),
+    W('لو فلتر Top N طلع نتايج غريبة مع فلاتر تانية، فكر فوراً في الترتيب: حوّل الفلتر المهم لـ Context وشوف النتيجة اتغيرت إزاي.')
+  ],
+  quiz:[
+    Q('عايز المستخدم يقدر يختار المدينة بنفسه من الـ Dashboard. تعمل إيه؟',['فلتر مخفي','Show Filter عشان يظهر كارت فلتر تفاعلي','Calculated Field'],1,'Show Filter بيحول الفلتر لكارت تفاعلي على جنب الرسمة يتحكم فيه اللي بيتفرج.'),
+    Q('الـ Parameter هو:',['فلتر عادي','متغير قيمته بيختارها المستخدم وتدخل في الصيغ والفلاتر','نوع Chart'],1,'الـ Parameter مدخل من المستخدم بيتحط جوه Calculated Fields أو فلاتر، فيغير نتايج الحساب نفسه مش بس الصفوف الظاهرة.'),
+    Q('عايز أعلى 3 عملاء بـ SUM(revenue). الطريق الأصح:',['Sort وخلاص','فلتر على customer من تاب Top بـ By field','Calculated Field بـ IF'],1,'تاب Top في فلتر الـ Dimension مع خيار By field بيحسب الترتيب على أساس الـ Measure ويجيب الأوائل.'),
+    Q('عايز Top 5 عملاء جوه القاهرة بس. لازم فلتر المدينة:',['يتشال','يتحول لـ Context Filter','يبقى Measure'],1,'فلاتر الـ Context بتتنفذ قبل فلاتر الـ Dimensions (اللي جواها Top N)، فالترتيب يبقى: القاهرة الأول، بعدين الأوائل جواها.')
+  ],
+  exercises:[
+    X('اعمل Bar لإيراد العملاء، وضيف فلتر Top 3 على customer. اكتب التلاتة الظاهرين.','','Mona بـ 30500 و Aya بـ 16700 و Omar بـ 5000. السؤال اللي بعده: ليه Omar مش Sara؟ لأن Omar 5000 و Sara 2800.'),
+    X('فعّل Show Filter على city وخليه Dropdown باختيار واحد. اختار Cairo وسجل إجمالي الإيراد الظاهر.','','20000. نفس الرقم اللي بيطلع من المعمل بـ SUM(IF [city]=\'Cairo\' THEN [revenue] END).'),
+    X('اعمل Parameter اسمه Target نوعه Integer ومداه من 0 لـ 40000 بخطوة 5000، واعمل Calculated Field يقارن SUM([revenue]) بالهدف زي صيغة الدرس. لما Target = 10000، أنهي مدن "عدت الهدف"؟','','Alexandria (30500) و Cairo (20000). Giza بـ 8500 تحت الهدف. لو رفعت Target لـ 25000 هتفضل Alexandria بس.'),
+    X('فلتر Measure على revenue بمدى أكبر من 5000. كام طلب فضل في الـ Grid؟','','3 طلبات بالظبط: 12000 و 13000 و 12500 (كلها Laptop). ممكن تتأكد من المعمل بـ COUNT(IF [revenue] > 5000 THEN [order_id] END).')
+  ]
+});
+
+CURRICULUM.push({
+  id:'dashboards',
+  nav:'الداشبورد',
+  title:'الدرس 10: الداشبورد: تجمع الرسوم في شاشة واحدة',
+  subtitle:'Layout و Containers و Actions اللي بتخلي الرسمة تفلتر أختها',
+  blocks:[
+    P('الـ Sheet الواحدة بتجاوب سؤال واحد. الـ Dashboard بيجمع كذا Sheet في شاشة واحدة تحكي القصة كاملة: رقم كبير فوق، تريند في النص، وتفصيل تحت. من أيقونة `New Dashboard` تحت (جنب New Worksheet) بتفتح صفحة تجميع فاضية.'),
+    H('تبني أول Dashboard'),
+    L([
+      'من قايمة `Size` على الشمال اختار مقاس ثابت (Desktop Browser مثلاً) أو Automatic. الثابت أضمن لما تنشر.',
+      'اسحب أي Sheet من قايمة الشمال وارميه على الصفحة.',
+      'اسحب Sheet تاني: Tableau بيعرضلك مستطيل رمادي بين المكان اللي هيتحط فيه. فوقه أو تحته أو جنبه.',
+      'الفلاتر والألوان اللي في الـ Sheets بتيجي معاها لوحدها ككروت على اليمين.'
+    ]),
+    H('Tiled و Floating'),
+    P('الوضع الافتراضي `Tiled`: كل عنصر لازق في شبكة من غير تداخل. فيه وضع تاني `Floating` بيخلي العنصر يطفو فوق أي حتة بمقاس حر. الأفضل تبدأ Tiled لأنه مضبوط لوحده، وتستخدم Floating للحاجات الصغيرة زي صورة أو عنوان.'),
+    H('الـ Containers'),
+    P('الـ Containers (أفقي ورأسي) صناديق بتجمع عناصر مع بعض وبتنظم التمدد لما الشاشة تكبر وتصغر. اسحب `Horizontal` من الشمال وحط جواه عنصرين جنب بعض. بتظهر لحدود زرقا لما تحدد أي عنصر، ومن السهم الصغير على العنصر تلاقي Edit و Remove و Format.'),
+    H('الأهم: Dashboard Actions'),
+    P('من غير Actions، كل رسمة عايشة لوحدها. من قائمة `Dashboard` ثم `Actions` ثم `Add Action` ثم `Filter`: اختار الرسمة المصدر (مثلاً خريطة المدن) والهدف (باقي الرسوم). دلوقتي لما تدوس على Alexandria في الخريطة، كل الرسوم التانية بتتفلتر على إسكندرية بس. دي السحر اللي بيفرق Dashboard عن صورة.'),
+    L([
+      '`Filter action`: الضغط على علامة بيفلتر رسوم تانية.',
+      '`Highlight action`: الضغط بيظلل العلامات المرتبطة من غير ما يشيل حاجة.',
+      '`URL action`: الضغط بيفتح لينك (مفيد لتفاصيل خارجية).'
+    ]),
+    N('بديل أسرع: من السهم على أي رسمة في الداشبورد فعّل `Use as Filter`، فهي نفسها تبقى فلتر للباقي بضغطة واحدة.'),
+    H('العناوين والنصوص'),
+    P('اسحب عنصر `Text` من الشمال واكتب عنوان واضح للداشبورد، وتحته سطر صغير يشرح اللي قدامه يعمل إيه ("دوس على أي مدينة عشان تشوف تفاصيلها"). العنوان الكويس بيوفر على المستخدم دقيقة تخمين.'),
+    H('Device Preview'),
+    P('من زرار `Device Preview` على الشمال تشوف الداشبورد هيبقى عامل إزاي على تابلت أو موبايل، وتضيف Layout مخصص لكل جهاز. غالبية الناس هتفتح اللينك من موبايل، فبص على ده قبل النشر.')
+  ],
+  quiz:[
+    Q('الفرق بين Sheet و Dashboard:',['مفيش فرق','الـ Sheet رسمة واحدة والـ Dashboard بيجمع كذا Sheet في شاشة واحدة','الـ Dashboard أسرع'],1,'الـ Worksheet صفحة بناء الرسمة الواحدة، والـ Dashboard مساحة تجميع لكذا Sheet مع فلاتر ونصوص.'),
+    Q('عايز تخلي الضغط على مدينة في الخريطة يفلتر باقي الرسوم. تستخدم:',['Container','Dashboard Action من نوع Filter','Floating'],1,'الـ Filter Action بيخلي رسمة مصدر تأثر على رسوم هدف عند الضغط، ودي أهم حاجة بتخلي الداشبورد تفاعلي.'),
+    Q('وضع Tiled في بناء الداشبورد يعني:',['العناصر بتطفو حرة فوق بعض','العناصر متنظمة في شبكة من غير تداخل','الداشبورد مقفل'],1,'Tiled بيلزق العناصر في شبكة مضبوطة، عكس Floating اللي بيسيبك تحط أي عنصر في أي مكان بحرية.'),
+    Q('أحسن مقاس تبدأ بيه داشبورد هيتنشر لناس كتير:',['أي حاجة','مقاس ثابت زي Desktop Browser وبعدين Device Preview للموبايل','أكبر مقاس ممكن'],1,'المقاس الثابت بيضمن شكل متوقع لكل اللي هيفتح، ومع Device Preview تظبط نسخة للموبايل.')
+  ],
+  exercises:[
+    X('اعمل 3 Sheets: KPI إجمالي الإيراد (Text كبير)، و Bar لإيراد المدن، و Line للتريند الشهري. جمعهم في Dashboard واحد بالترتيب ده.','','الترتيب المنطقي: الرقم الكبير فوق يجاوب "إحنا فين؟"، والتريند والمقارنة تحته يجاوبوا "ليه؟".'),
+    X('فعّل Use as Filter على Bar بتاع المدن، واضغط على عمود Alexandria. إيه اللي حصل للـ KPI والتريند؟','','الاتنين اتفلتروا على إسكندرية: الـ KPI بقى 30500 والتريند بقى بيعرض شهور إسكندرية بس.'),
+    X('جرب تنقل الفلاتر من مكان لمكان في الداشبورد واضغط الـ Device Preview على Phone. إيه اللي لاحظته؟','','المقاس الضيق بيكسر الترتيب الأفقي، فالأحسن للموبايل Layout رأسي: KPI ثم تريند ثم تفصيل، تحت بعض.'),
+    X('ضيف Text object بعنوان "داشبورد مبيعات 2025" وسطر شرح تحته. ليه السطر الصغير ده مهم؟','','لأن اللي بيفتح الداشبورد أول مرة محتاج يعرف هو بيبص على إيه وإزاي يتفاعل معاه في ثواني، والعنوان والشرح بيعملوا كده.')
+  ]
+});
+
+CURRICULUM.push({
+  id:'stories',
+  nav:'الـ Stories',
+  title:'الدرس 11: الـ Stories: احكي القصة ورقة ورقة',
+  subtitle:'من داشبورد بيتبص عليه، لعرض بيمشي بيه الناس خطوة خطوة',
+  blocks:[
+    P('الـ Dashboard بيسيب المستخدم يستكشف لوحده. بس أحياناً إنت عايز تمسك إيده وتمشي بيه على نتيجة معينة: "بص هنا، وبعدين هنا، وعشان كده القرار كذا". دي وظيفة الـ `Story`: سلسلة من الـ Story Points، كل واحدة بتحط فيها Sheet أو Dashboard وتكتب فوقها عنوان يشرحها.'),
+    H('تعمل Story إزاي'),
+    L([
+      'من أيقونة `New Story` تحت (جنب Dashboard).',
+      'من الشمال اسحب Sheet أو Dashboard جوه أول Story Point.',
+      'فوق كل Point فيه مساحة `Caption`: اكتب فيها الجملة اللي عايز المشاهد يطلع بيها.',
+      'من `New Blank Point` على الشمال ضيف النقطة اللي بعدها، وهكذا.',
+      'الأسهم فوق بتمشي بين النقاط، والـ Story بتتحفظ وتتنشر زي أي Sheet.'
+    ]),
+    H('أنواع الـ Story Points'),
+    L([
+      'نقطة فيها رسمة كما هي.',
+      'نقطة فيها نفس الرسمة بعد ما فلترتها لحالة معينة: مثلاً نفس الداشبورد بس متفلتر على Alexandria. Tableau بيحفظ حالة الفلاتر مع النقطة.'
+    ]),
+    N('الفكرة الذهبية: نفس الداشبورد، نقاط مختلفة بحالات فلاتر مختلفة. نقطة "الصورة العامة"، نقطة "أعلى مدينة"، نقطة "التريند الزمني"، ونقطة أخيرة "التوصية".'),
+    H('Story ولا Dashboard؟'),
+    T(['لو عايز','استخدم'],[
+      ['المستخدم يستكشف بنفسه ويفلتر براحته','Dashboard'],
+      ['تمشي الناس على استنتاج معين خطوة خطوة','Story'],
+      ['عرض قدام إدارة أو في محاضرة','Story'],
+      ['متابعة يومية لنفس الأرقام','Dashboard']
+    ]),
+    W('الـ Story مش PowerPoint: كل نقطة لسه حية ومتصلة بالداتا، والمشاهد يقدر يفلتر جواها. فمتحطش فيها شرايح ثابتة مكتوبة كتير: خلي الكلام في الـ Captions قصير ومركز.'),
+    H('نصايح للقصة الكويسة'),
+    L([
+      'ابدأ بالسؤال مش بالرسمة: "أنهي مدينة بتكسبنا أكتر؟"',
+      'كل نقطة تجاوب جزء وتفتح سؤال اللي بعده.',
+      'اختم بتوصية أو قرار واضح، مش بس "ودي البيانات".',
+      'من 4 لـ 7 نقاط رقم كويس: أقل مبتبنيش زخم، وأكتر بتمل.'
+    ])
+  ],
+  quiz:[
+    Q('الـ Story Point الواحدة بتحتوي على:',['Sheet أو Dashboard مع Caption يشرحها','ملف PDF','فلتر واحد بس'],0,'كل نقطة في الـ Story بتحط فيها رسمة أو داشبورد، وكتير من قوتها إن Caption فوقها يقول للمشاهد يبص فين.'),
+    Q('عايز تعرض نفس الداشبورد مرة عامة ومرة متفلتر على مدينة واحدة في نفس الـ Story:',['لازم داشبوردين مختلفين','كل Story Point بتحفظ حالة الفلاتر بتاعتها، فتقدر تستخدم نفس الداشبورد بحالتين','مش ممكن'],1,'Tableau بيحفظ حالة الرسمة (فلاتر واختيارات) مع كل نقطة، فنفس المحتوى يظهر بحالات مختلفة عبر النقاط.'),
+    Q('الفرق الأساسي بين Dashboard و Story:',['الـ Story أجمل','الـ Dashboard للاستكشاف الحر والـ Story لقيادة المشاهد على مسار معين','الـ Story مش بتتنشر'],1,'الاختيار بينهم سؤال تواصل: حرية استكشاف ولا قصة مقودة. الاتنين بيتنشروا على Tableau Public عادي.'),
+    Q('أنهي عدد نقاط منطقي لـ Story واحدة غالباً؟',['1','من 4 لـ 7','30'],1,'عدد قليل بيمنع الملل وبيحافظ على زخم القصة. Story طويلة جداً بتتحول لعرض ممل.')
+  ],
+  exercises:[
+    X('اعمل Story من 3 نقاط: داشبورد عام، نفس الداشبورد متفلتر على Alexandria، وتريند الشهور. اكتب Caption لكل نقطة.','','مثال: "مبيعاتنا في 2025 بالكامل: 59000 جنيه"، "إسكندرية لوحدها: 30500 أكتر من نص الإيراد"، "فبراير أعلى شهر: 19000". لاحظ إن كل Caption فيه رقم.'),
+    X('ليه الـ Captions في المثال اللي فات كله فيه أرقام؟','','الرقم بيثبت الكلام: "أعلى مدينة" ادعاء، "إسكندرية 30500 من إجمالي 59000" معلومة. القصة الكويسة = جملة + رقم + رسمة.'),
+    X('متى تختار Story بدل Dashboard في شغل حقيقي؟ اذكر موقفين.','','عرض نتايج تحليل على إدارة (قصة مقودة)، أو شرح سبب قرار لفريق. أما المتابعة اليومية المتكررة فداشبورد تفاعلي أنسب.'),
+    X('في Story بتاعتك، جرب تفلتر جوه نقطة من النقاط أثناء العرض. إيه اللي حصل؟','','الفلترة اشتغلت عادي لأن كل نقطة حية ومتصلة بالداتا. دي ميزة الـ Story على العرض التقديمي الثابت.')
+  ]
+});
+
+CURRICULUM.push({
+  id:'publish',
+  nav:'النشر على Tableau Public',
+  title:'الدرس 12: النشر على Tableau Public: شغلك بقى ليه لينك',
+  subtitle:'Save to Tableau Public وملفك الشخصي والمشاركة والتعديل',
+  blocks:[
+    P('كل اللي فات كان بناء على جهازك. دلوقتي وقت ما شغلك يشوف النور: النشر على Tableau Public بيديك لينك عام تبعته لأي حد، يفتح منه الداشبورد ويتفاعل معاه من المتصفح، من غير ما يكون عنده البرنامج أصلاً.'),
+    H('تنشر إزاي'),
+    L([
+      'خلص الداشبورد وافتح الـ Sheet أو الداشبورد اللي عايز ينشر.',
+      'من قائمة `File` اختار `Save to Tableau Public As`.',
+      'سجل دخول بحسابك لو مش مسجل، واكتب اسم للـ Workbook.',
+      'استنى الرفع، وهيتفتحلك المتصفح على صفحة الـ Workbook المنشور.'
+    ]),
+    N('النشر بيرفع كل الـ Sheets والـ Dashboards اللي في الـ Workbook، والمشاهد بيتنقل بينهم من تابات فوق زي البرنامج بالظبط. تقدر تختار تخفي بعض التابات من خيار Show Sheets عند الحفظ.'),
+    H('ملفك الشخصي'),
+    L([
+      'صفحتك على public.tableau.com/app/profile/ واسمك بتعرض كل منشوراتك.',
+      'من أيقونة القلم تقدر تعدل الاسم والوصف وتضيف صورة شخصية ولينكات.',
+      'كل Workbook ليه صفحة فيها عنوان ووصف وصورة مصغرة وعدد مشاهدات.'
+    ]),
+    H('المشاركة'),
+    L([
+      'زرار `Share` على صفحة الـ Workbook بيديك لينك مباشر وكود Embed لو عايز تحط الداشبورد جوه موقع.',
+      'اللينك بيفتح من الموبايل والكمبيوتر، والتفاعل (فلاتر و Actions) شغال في المتصفح زي البرنامج.',
+      'من إعدادات الـ Workbook تقدر تمنع أو تسمح بتحميل الداتا والـ Workbook.'
+    ]),
+    W('فكر تاني قبل ما تنشر: أي حاجة على Tableau Public عامة. راجع إن مفيش داتا حساسة، ومفيش Sheet تجريبي ملوش لازمة اتنسى في الـ Workbook. مسح المنشور بيتعمل من صفحته (علامة X أو من الإعدادات)، بس اللي شافه شافه.'),
+    H('تحديث شغل منشور'),
+    P('عدلت حاجة في البرنامج وعايز تنعكس على المنشور؟ اعمل `Save to Tableau Public` تاني بنفس الاسم: هيسألك لو عايز تستبدل النسخة المنشورة، وافق، واللينك القديم هيفضل شغال بالنسخة الجديدة.'),
+    H('الداشبورد كـ Portfolio'),
+    P('لينك Tableau Public الخاص بيك من أقوى الحاجات اللي تحطها في CV أو LinkedIn لحد بيتعلم Data Analysis: دليل عملي إنك بتعرف تبني Dashboard كامل، مش كلام. داتا الكورس دي مثال بسيط، بس نفس الخطوات بتتطبق على أي داتا عامة تعجبك.')
+  ],
+  quiz:[
+    Q('تنشر Workbook على Tableau Public من خلال:',['File ثم Save As على الجهاز','File ثم Save to Tableau Public As','Ctrl+S وبس'],1,'الحفظ في نسخة Public بيكون على حسابك العام عن طريق Save to Tableau Public، ومفيش حفظ محلي.'),
+    Q('اللي هيفتح لينك الداشبورد المنشور محتاج:',['برنامج Tableau على جهازه','متصفح بس، والتفاعل شغال','اشتراك مدفوع'],1,'المنشور بيشتغل في المتصفح كامل: فلاتر و Actions و Tooltips، من غير أي تنزيل.'),
+    Q('عدلت الداشبورد في البرنامج وعايز اللينك القديم يعرض التعديل. تعمل إيه؟',['تنشر من جديد باسم مختلف','تحفظ على Tableau Public بنفس الاسم وتوافق على الاستبدال','مش ممكن'],1,'الحفظ بنفس الاسم بيستبدل النسخة المنشورة ونفس اللينك يفضل شغال.'),
+    Q('قبل ما تنشر لازم تراجع:',['إن الألوان حلوة بس','إن مفيش داتا حساسة ولا Sheets تجريبية في الـ Workbook','عدد الرسوم'],1,'لأن المنشور عام بالكامل: الداتا والـ Workbook نفسه ممكن يتشافوا ويتحملوا، فالمراجعة خطوة أمان مش شكل.')
+  ],
+  exercises:[
+    X('انشر أي Sheet من شغل الدروس الفاتت على Tableau Public، وافتح اللينك من موبايلك. اكتب الفرق اللي لاحظته في التجربة.','','الداشبورد بيتفاعل من المتصفح عادي. على الموبايل هتلاحظ أهمية الـ Device Layout اللي اتكلمنا عنه في درس الداشبورد.'),
+    X('من صفحة الـ Workbook المنشور، اضغط Share واطلع اللينك المباشر وكود الـ Embed. الفرق بينهم إيه؟','','اللينك بيفتح صفحة Tableau Public كاملة، وكود الـ Embed بيحط الداشبورد جوه صفحة موقع تاني (زي بورتفوليو شخصي).'),
+    X('عدّل أي حاجة في الـ Sheet عندك واحفظ بنفس الاسم، وافتح اللينك تاني. إيه اللي حصل؟','','اللينك نفسه بقى بيعرض النسخة الجديدة بعد الاستبدال. اللينك ثابت والمحتوى بيتحدث.'),
+    X('امسح Workbook تجريبي من ملفك. إزاي، وليه المسح مش حماية كاملة؟','','من صفحة الـ Workbook أو من قائمة الإعدادات في الـ Profile. المسح بيشيله من الموقع، بس أي حد شافه أو حمله قبل كده عنده نسخة، فالأمان الحقيقي هو إنك متنشرش حساس من الأول.')
+  ]
+});
+
+CURRICULUM.push({
+  id:'design',
+  nav:'مبادئ التصميم',
+  title:'الدرس 13: مبادئ التصميم: الفرق بين داشبورد وداشبورد محترم',
+  subtitle:'العين بتلقط إيه الأول، واللون إمتى صديق وإمتى عدو',
+  blocks:[
+    P('نفس الداتا ونفس الـ Charts ممكن تطلع داشبورد تافه أو داشبورد محترف. الفرق مش في Tableau، الفرق في قرارات التصميم. المبادئ اللي جاية دي بتتطبق في أي أداة، وهتلاقيها ورا كل Dashboard كويس شوفته.'),
+    H('العين بتلقط إيه الأول'),
+    P('في حاجات اسمها Preattentive Attributes: حاجات العين بتمسكها قبل ما تفكر، زي اللون المختلف والحجم الأكبر والمكان المميز. استخدمها عمداً: لون واحد مختلف على الحاجة المهمة خير من 10 ألوان. لو كل حاجة بتصوت عالي، مفيش حاجة مسموعة.'),
+    H('اللون'),
+    L([
+      'قعدة الـ Palette: لونين تلاتة أساسيين وخلاص. Tableau فيه Palettes جاهزة مضبوطة، استخدمها.',
+      'الأحمر والأخضر ليهم معنى جاهز عند الناس: خطر وخسارة مقابل أمان وربح. متعكسهمش.',
+      'التدرج اللوني الواحد (Gradient) للقيم المتصلة زي الإيراد: الفاتح قليل والغامق كتير.',
+      'اعمل حساب عمى الألوان: حوالي 8% من الرجالة عندهم صعوبة أحمر/أخضر، فمتعتمدش على اللون لوحده أبداً (ضيف Label أو اختلاف في الشكل).'
+    ]),
+    H('اختار الشكل الصح للسؤال'),
+    T(['السؤال','الشكل الأنسب'],[
+      ['مقارنة فئات','Bar Chart'],
+      ['تريند عبر الزمن','Line Chart'],
+      ['علاقة بين رقمين','Scatter Plot'],
+      ['توزيع جغرافي','Map'],
+      ['رقم واحد مهم','KPI نص كبير'],
+      ['نسب بسيطة من كل (فئتين تلاتة)','ممكن Pie، والأعمدة أضمن']
+    ]),
+    H('الترتيب والتنظيم'),
+    L([
+      'القارئ العربي والإنجليزي بيبدأ من فوق: أهم معلومة (الـ KPI) فوق، والتفصيل تحت.',
+      'حاجة واحدة كبيرة خير من 6 حاجات صغيرة متزحمة. الشاشة مش دكان.',
+      'المحاذاة: الحواف المظبوطة بتوحي بالاحتراف حتى لو الرسمة بسيطة. استخدم الـ Containers.',
+      'سيب مساحة فاضية: الـ Whitespace مش ضياع، ده راحة للعين.'
+    ]),
+    H('النصوص'),
+    L([
+      'عنوان الداشبورد يقول الاستنتاج مش بس الموضوع: "إسكندرية نص المبيعات" أحسن من "تقرير مبيعات".',
+      'شيل أي حاجة مش بتضيف معلومة: خطوط جريد كتير، حدود تقيلة، خلفيات مزخرفة. دي كلها Chartjunk.',
+      'وحّد تنسيق الأرقام: عملة أو نسبة أو عدد، وبنفس عدد الكسور في كل مكان.'
+    ]),
+    N('تمرين سريع لأي Dashboard: وراه لحد ميعرفش عن الداتا حاجة واسأله بعد 10 ثواني "فهمت إيه؟". لو مفهمش حاجة، فيه قرار تصميم محتاج يتراجع.'),
+    W('أكتر غلطة بتبوظ داشبوردات المبتدئين: حشو كل رسمة اتعملت في شاشة واحدة. الداشبورد مش أرشيف للرسوم، ده إجابة مركزة. اللي مش بيخدم السؤال يتشال.')
+  ],
+  quiz:[
+    Q('الـ Preattentive Attributes هي:',['أنواع فلاتر','حاجات العين بتلقطها قبل التفكير زي اللون المميز والحجم','إعدادات الخط'],1,'اللون المختلف والحجم الأكبر والمكان بتتعالج في الدماغ قبل الوعي، فبتستخدمها لتوجيه الانتباه للمعلومة المهمة.'),
+    Q('عايز تبرز مدينة واحدة وسط 3 على الخريطة. أحسن حاجة:',['تلون كل مدينة بلون مبهج','تخلي الكل رمادي هادي والمدينة المهمة بلون واضح','تكبر الخريطة'],1,'التباين مع خلفية هادية بيوجه العين فوراً. لو كل حاجة مبهجة مفيش حاجة مميزة.'),
+    Q('الـ Chartjunk هو:',['رسمة غلط','أي عنصر بصري مش بيضيف معلومة زي الزخارف والخطوط التقيلة','بيانات ناقصة'],1,'كل خط وظل وزخرفة مش بيخدم الفهم بيستهلك انتباه القارئ في حاجة ملهاش لازمة.'),
+    Q('ليه متعتمدش على اللون الأحمر والأخضر لوحدهم في تمييز خسارة من ربح؟',['لأنهم موضة قديمة','لأن نسبة كبيرة من الناس عندها عمى ألوان أحمر/أخضر','لأن Tableau بيرفضهم'],1,'حوالي 8% من الرجالة مش بيفرقوا أحمر/أخضر كويس. ضيف نص أو شكل أو رقم جنب اللون عشان المعلومة توصل للكل.')
+  ],
+  exercises:[
+    X('خد أي Dashboard عملته في الدروس اللي فاتت وطبق عليه 3 تعديلات من الدرس ده. اكتبهم.','','أمثلة: توحيد الألوان لـ Palette واحدة، تغيير العنوان لجملة استنتاج، شيل خطوط الجريد الزيادة. أي 3 قرارات واعية صح.'),
+    X('رتب 5 رسوم في داشبورد واحد: KPI فوق، تريند ومقارنة في النص، وتفصيل تحت. ليه الترتيب ده منطقي؟','','القارئ بيبدأ من فوق: الرقم الكبير يجاوب "إحنا فين؟"، واللي تحته يجاوب "ليه؟"، والتفصيل في الآخر لمن عايز يحفر.'),
+    X('ليه "إسكندرية نص المبيعات" عنوان أحسن من "تقرير مبيعات 2025"؟','','الأول بيسلمك الاستنتاج في ثانية وبيخليك تبص في الرسمة تتأكد. التاني وصف محايد مبيضيفش فهم.'),
+    X('افتح أي Dashboard من الـ Gallery على Tableau Public وعد الألوان الأساسية المستخدمة فيه.','','هتلاقي غالب المحترفين ماشيين بلونين تلاتة وخلفية هادية. دي مش صدفة، دي قاعدة الدرس ده شغالة.')
+  ]
+});
+
+CURRICULUM.push({
+  id:'capstone',
+  nav:'المشروع النهائي',
+  title:'الدرس 14: المشروع النهائي: داشبورد مبيعات من الأول للنشر',
+  subtitle:'كل اللي اتعلمته في مشروع واحد على داتا مبيعات مصرية',
+  blocks:[
+    P('وصلت للآخر. المشروع ده بيجمع كل دروس الكورس في داشبورد واحد منشور على Tableau Public: من توصيل الملفات لحد اللينك اللي هتبعته لأي حد. اعمله كله بإيدك، والأرقام اللي هتشوفها لازم تطابق اللي مكتوبة هنا، لأنها محسوبة من نفس الملفات.'),
+    H('الخطوة 1: التوصيل والتحضير'),
+    L([
+      'وصّل `sales_data.csv` (Text file) واسحب `products.csv` جنبه بـ Join على `product_name`.',
+      'اتأكد: 12 صف في الـ Grid، و `order_date` نوعه Date.',
+      'اعمل Calculated Field اسمه `Profit`: `[revenue] - [cost]`.',
+      'اعمل تاني اسمه `Profit Ratio`: `SUM([profit]) / SUM([revenue])` وظبطه كـ Percentage.'
+    ]),
+    H('الخطوة 2: الـ KPIs'),
+    P('Sheet اسمها KPI: اسحب `revenue` و `Profit` و `Profit Ratio` على Text. لازم يظهر: إجمالي إيراد 59000، وإجمالي ربح 14930، وهامش حوالي 25.31%. كبّر الخط ووحّد التنسيق.'),
+    H('الخطوة 3: التريند الشهري'),
+    P('Sheet اسمها Trend: `order_date` على Columns نازل لمستوى MONTH، و `revenue` على Rows كخط. القيم اللي لازم تشوفها: يناير 14500، فبراير 19000، مارس 17600، أبريل 7900. فبراير أعلى شهر.'),
+    H('الخطوة 4: المدن والفئات'),
+    L([
+      'Sheet اسمها Cities: Symbol Map على `city` (Geographic Role = City) والإيراد على Size و Color. Alexandria الأكبر بـ 30500، وراها Cairo بـ 20000، وأصغرهم Giza بـ 8500.',
+      'Sheet اسمها Categories: Bar لإيراد `category` مفروز تنازلي: Tech بـ 39300 ثم Furniture بـ 19700.'
+    ]),
+    H('الخطوة 5: الداشبورد'),
+    L([
+      'Dashboard جديد بمقاس ثابت. فوق عنوان بجملة استنتاج، وتحته الـ KPIs.',
+      'التريند والخريطة في النص جنب بعض، والفئات تحتهم.',
+      'فعّل `Use as Filter` على الخريطة والفئات: الضغط على أي مدينة أو فئة يفلتر الباقي.',
+      'ضيف Show Filter لـ city و Show Parameter لو حابب تجرب هدف الإيراد من درس 9.'
+    ]),
+    H('الخطوة 6: النشر'),
+    L([
+      'راجع: مفيش داتا حساسة، كل الرسوم ليها لازمة، العنوان يحكي استنتاج.',
+      '`File ثم Save to Tableau Public As` وسميه اسم واضح زي "Egypt Sales 2025".',
+      'افتح اللينك من موبايلك وجرب الفلاتر.',
+      'حط اللينك في الـ CV أو LinkedIn: ده أول مشروع في الـ Portfolio بتاعك.'
+    ]),
+    H('قايمة التسليم'),
+    L([
+      'إجمالي إيراد: 59000.',
+      'إجمالي ربح: 14930 وهامش 25.31%.',
+      'أعلى مدينة: Alexandria بـ 30500.',
+      'أعلى فئة: Tech بـ 39300.',
+      'أعلى شهر: فبراير بـ 19000.',
+      'أعلى عميلة: Mona بـ 30500.',
+      'الداشبورد منشور ولينكه شغال من المتصفح والموبايل.'
+    ]),
+    N('لو رقم عندك طلع مختلف عن القايمة دي، ارجع للدرس اللي بيغطيه ودور: تجميعة غلط؟ Join اتعمل غلط؟ فلتر متنسي؟ دي بالظبط طريقة مراجعة أي تحليل حقيقي.'),
+    P('مبروك من الآخر. إنت دلوقتي عديت على كل مراحل بناء Dashboard في Tableau من الصفر للنشر. اللي جاي ممارسة: خد أي داتا عامة تعجبك (Kaggle فيه الآلاف) واعمل نفس الرحلة لوحدك.')
+  ],
+  quiz:[
+    Q('في المشروع النهائي، إجمالي الإيراد اللي لازم يظهر في الـ KPI هو:',['49000','59000','69000'],1,'مجموع عمود revenue في الـ 12 صف = 59000 بالظبط. تقدر تتأكد في المعمل بـ SUM([revenue]).'),
+    Q('أعلى مدينة في الإيراد في داتا المشروع:',['Cairo','Giza','Alexandria'],2,'إسكندرية بـ 30500 من 3 طلبات كبيرة (كلها للعميلة Mona)، وراها القاهرة بـ 20000.'),
+    Q('هامش الربح الإجمالي الصح في المشروع:',['حوالي 20.13%','حوالي 25.31%','حوالي 30.46%'],1,'14930 ربح على 59000 إيراد = 25.31%. لاحظ إن 30.46% هو هامش Furniture لوحدها، و20.13% مش رقم من الداتا أصلاً.'),
+    Q('ترتيب خطوات المشروع الصح:',['النشر ثم الرسم ثم التوصيل','التوصيل والتحضير ثم الرسوم ثم الداشبورد ثم النشر','الداشبورد الأول ثم الداتا'],1,'توصل الداتا وتجهزها (Join و Calculated Fields)، تبني الرسوم، تجمعهم في داشبورد تفاعلي، وبعدين تنشر.')
+  ],
+  exercises:[
+    X('نفذ المشروع كله بالخطوات اللي فوق، وقارن كل رقم في الـ KPIs والرسوم بقايمة التسليم.','','القايمة في الدرس: 59000 و 14930 و 25.31% و Alexandria 30500 و Tech 39300 و فبراير 19000 و Mona 30500. أي اختلاف معناه خطوة محتاجة مراجعة.'),
+    X('من المعمل: اكتب صيغة واحدة تطلع نسبة إيراد إسكندرية من الإجمالي، وتأكد إن الناتج حوالي 0.5169.','',"SUM(IF [city] = 'Alexandria' THEN [revenue] END) / SUM([revenue]) = 30500 على 59000 حوالي 51.69%. إسكندرية لوحدها أكتر من نص المبيعات."),
+    X('اضغط على Alexandria في الخريطة جوه الداشبورد المنشور. إيه اللي لازم يحصل لو الـ Actions مظبوطة؟','','كل الرسوم بتتفلتر على إسكندرية: الـ KPI يبقى 30500، والتريند يعرض شهور إسكندرية بس (فبراير ومارس وأبريل).'),
+    X('اكتب بوست LinkedIn قصير عن المشروع فيه اللينك وأهم 3 أرقام.','','مثال: "خلصت أول Dashboard ليا في Tableau: مبيعات 2025 بإجمالي 59000، إسكندرية لوحدها 30500، وهامش ربح 25.31%. اللينك في التعليقات." الأرقام الحقيقية أقوى من أي كلام عام.')
+  ]
+});
+
+CURRICULUM.forEach((l,i)=>{l.title=l.title.replace(/^الدرس \d+: /,'');l.title='الدرس '+(i+1)+': '+l.title;});
+</script>
+<script>
+/* Tableau من الصفر : rendering engine + progress tracking */
+(function () {
+  'use strict';
+
+  var STORAGE_KEY = 'tableau-zero-progress-v1';
+
+  function loadProgress() {
+    try {
+      var raw = localStorage.getItem(STORAGE_KEY);
+      if (raw) {
+        var p = JSON.parse(raw);
+        if (p && typeof p === 'object') {
+          p.answers = p.answers || {};
+          p.done = p.done || {};
+          return p;
+        }
+      }
+    } catch (e) { /* corrupted storage -> start fresh */ }
+    return { answers: {}, done: {} };
+  }
+
+  function saveProgress() {
+    try { localStorage.setItem(STORAGE_KEY, JSON.stringify(progress)); } catch (e) {}
+  }
+
+  var progress = loadProgress();
+
+  /* ---------- helpers ---------- */
+  function esc(s) {
+    return String(s)
+      .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  }
+
+  /* small Excel formula highlighter: strings, function names, cell refs, numbers */
+  var XLFNS = ['SUM','AVERAGE','MIN','MAX','COUNT','COUNTA','DISTINCTCOUNT','COUNTROWS','SUMX','AVERAGEX','MINX','MAXX','RELATED','CALCULATE','FILTER','ALL','DIVIDE','IF','SWITCH','AND','OR','NOT','TRUE','FALSE','BLANK','ISBLANK','ROUND','ABS','DATE','YEAR','MONTH','DAY','DATESBETWEEN','DATESYTD','TOTALYTD','DATEADD','SAMEPERIODLASTYEAR','CALENDAR','CALENDARAUTO','VAR','RETURN','IN','DAY','MONTH','QUARTER'];
+  var HL_RE = new RegExp(
+    '("(?:[^"]|"")*")' +
+    '|(\\b(?:' + XLFNS.join('|') + ')\\b)(?=\\s*\\(|\\s+[A-Za-z]|\\s*$)' +
+    '|((?:\'[^\']+\'|[A-Za-z_][A-Za-z_0-9]*)?\\[[^\\]]+\\])' +
+    '|(\\b\\d+(?:\\.\\d+)?\\b)', 'g');
+
+  function highlight(code) {
+    var out = esc(code).replace(HL_RE, function (m, s, f, r, n) {
+      if (s) return '<span class="s">' + s + '</span>';
+      if (f) return '<span class="k">' + f + '</span>';
+      if (r) return '<span class="k">' + r + '</span>';
+      if (n) return '<span class="n">' + n + '</span>';
+      return m;
+    });
+    return '<pre><code>' + out + '</code></pre>';
+  }
+
+  function renderInline(text) {
+    /* `code` spans inside normal text */
+    return esc(text).replace(/`([^`]+)`/g, function (_, c) {
+      return '<span class="kw">' + c + '</span>';
+    });
+  }
+
+  /* ---------- progress ---------- */
+  function totalLessons() { return CURRICULUM.length; }
+  function doneCount() {
+    var n = 0;
+    CURRICULUM.forEach(function (l) { if (progress.done[l.id]) n++; });
+    return n;
+  }
+
+  function refreshProgressUI() {
+    var pct = totalLessons() ? Math.round(doneCount() / totalLessons() * 100) : 0;
+    document.getElementById('progress-fill').style.width = pct + '%';
+    document.getElementById('progress-text').textContent = pct + '%';
+    CURRICULUM.forEach(function (l) {
+      var el = document.querySelector('.nav-item[data-id="' + l.id + '"]');
+      if (el) { el.classList.toggle('done', !!progress.done[l.id]); el.querySelector('.check').textContent=progress.done[l.id]?'✓':''; }
+    });
+  }
+
+  /* ---------- nav ---------- */
+  function buildNav() {
+    var nav = document.getElementById('nav');
+    nav.innerHTML = '';
+    CURRICULUM.forEach(function (l, idx) {
+      var item = document.createElement('button');
+      item.type='button';
+      item.className = 'nav-item';
+      item.dataset.id = l.id;
+      item.innerHTML = '<span class="check">' + (progress.done[l.id] ? '✓' : '') + '</span>' +
+        '<span class="num">' + (idx + 1) + '</span><span>' + esc(l.nav) + '</span>';
+      item.addEventListener('click', function () {
+        openLesson(l.id);
+        document.getElementById('sidebar').classList.remove('open');
+      });
+      nav.appendChild(item);
+    });
+  }
+
+  /* ---------- lesson rendering ---------- */
+  function renderBlocks(blocks) {
+    var html = '';
+    blocks.forEach(function (b) {
+      if (b.type === 'p') html += '<p>' + renderInline(b.text) + '</p>';
+      else if (b.type === 'h') html += '<h3>' + esc(b.text) + '</h3>';
+      else if (b.type === 'code') html += highlight(b.code);
+      else if (b.type === 'note') html += '<div class="note' + (b.warn ? ' warn' : '') + '">' + renderInline(b.text) + '</div>';
+      else if (b.type === 'list') {
+        html += '<ul>' + b.items.map(function (i) { return '<li>' + renderInline(i) + '</li>'; }).join('') + '</ul>';
+      } else if (b.type === 'table') {
+        html += '<table class="demo"><tr>' + b.head.map(function (h) { return '<th>' + esc(h) + '</th>'; }).join('') + '</tr>' +
+          b.rows.map(function (r) { return '<tr>' + r.map(function (c) { return '<td>' + esc(c) + '</td>'; }).join('') + '</tr>'; }).join('') +
+          '</table>';
+      }
+    });
+    return html;
+  }
+
+  var currentLesson = null;
+
+  function openLesson(id) {
+    var lesson = null, idx = -1;
+    CURRICULUM.forEach(function (l, i) { if (l.id === id) { lesson = l; idx = i; } });
+    if (!lesson) return;
+    currentLesson = lesson;
+    document.getElementById('lab').hidden = true;
+    document.getElementById('lesson').style.display = 'block';
+    progress.lastLesson = id; saveProgress();
+
+    document.getElementById('hero').style.display = 'none';
+    var host = document.getElementById('lesson');
+
+    var html = '<div class="lesson">';
+    html += '<h2 class="lesson-title">' + esc(lesson.title) + '</h2>';
+    html += '<div class="lesson-sub">' + esc(lesson.subtitle) + '</div>';
+    html += renderBlocks(lesson.blocks);
+    html += '<div class="quiz-box" id="quiz-box"><h3>🧠 اختبر نفسك</h3><div id="quiz-qs"></div><div class="quiz-result" id="quiz-result"></div></div>';
+    html += '<div class="exercise-box"><h3>✍️ تمارين عملية</h3><div id="exs"></div></div>';
+    html += '<div class="complete-badge" id="complete-badge">🎉 مبروك! خلصت الدرس ده. كمل اللي بعده 👇</div>';
+    html += '<div class="lesson-nav">';
+    html += '<button id="prev-btn"' + (idx === 0 ? ' disabled' : '') + '>→ الدرس اللي فات</button>';
+    html += '<button id="next-btn" class="next-btn"' + (idx === CURRICULUM.length - 1 ? ' disabled' : '') + '>الدرس اللي بعده ←</button>';
+    html += '</div></div>';
+
+    host.innerHTML = html;
+
+    buildQuiz(lesson);
+    buildExercises(lesson);
+
+    document.getElementById('prev-btn').addEventListener('click', function () {
+      if (idx > 0) openLesson(CURRICULUM[idx - 1].id);
+    });
+    document.getElementById('next-btn').addEventListener('click', function () {
+      if (idx < CURRICULUM.length - 1) openLesson(CURRICULUM[idx + 1].id);
+    });
+
+    document.querySelectorAll('.nav-item').forEach(function (n) {
+      n.classList.toggle('active', n.dataset.id === id);
+    });
+    refreshProgressUI();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  /* ---------- quiz ---------- */
+  function buildQuiz(lesson) {
+    var qsHost = document.getElementById('quiz-qs');
+    lesson.quiz.forEach(function (q, qi) {
+      var box = document.createElement('div');
+      box.className = 'quiz-q';
+      var qid = lesson.id + ':' + qi;
+
+      var qhtml = '<div class="q-text">' + (qi + 1) + '. ' + renderInline(q.q) + '</div>';
+      if (q.code) qhtml += highlight(q.code);
+      box.innerHTML = qhtml;
+
+      var answered = progress.answers[qid];
+      var fb = document.createElement('div');
+      fb.className = 'feedback';
+
+      q.options.forEach(function (opt, oi) {
+        var btn = document.createElement('button');
+        btn.className = 'opt';
+        btn.innerHTML = opt.mono ? '<span class="mono">' + esc(opt.text) + '</span>' : renderInline(opt.text);
+        btn.addEventListener('click', function () {
+          if (progress.answers[qid] !== undefined) return;
+          var correct = (oi === q.answer);
+          progress.answers[qid] = { picked: oi, correct: correct };
+          saveProgress();
+          paint();
+          checkQuizDone(lesson);
+        });
+        box.appendChild(btn);
+      });
+      box.appendChild(fb);
+      qsHost.appendChild(box);
+
+      function paint() {
+        var rec = progress.answers[qid];
+        var btns = box.querySelectorAll('.opt');
+        btns.forEach(function (b, oi) {
+          b.disabled = rec !== undefined;
+          if (rec !== undefined) {
+            if (oi === q.answer) b.classList.add('correct');
+            else if (oi === rec.picked) b.classList.add('wrong');
+          }
+        });
+        if (rec !== undefined) {
+          fb.className = 'feedback ' + (rec.correct ? 'ok' : 'no');
+          fb.innerHTML = (rec.correct ? '✅ صح! ' : '❌ مش دي. ') + renderInline(q.explain);
+        }
+      }
+      paint();
+    });
+    checkQuizDone(lesson);
+  }
+
+  function checkQuizDone(lesson) {
+    var total = lesson.quiz.length, answered = 0, correct = 0;
+    lesson.quiz.forEach(function (q, qi) {
+      var rec = progress.answers[lesson.id + ':' + qi];
+      if (rec !== undefined) { answered++; if (rec.correct) correct++; }
+    });
+    var result = document.getElementById('quiz-result');
+    if (answered === total && total > 0) {
+      if (correct === total && !progress.done[lesson.id]) {
+        progress.done[lesson.id] = true;
+        saveProgress();
+      }
+      result.classList.add('show');
+      result.innerHTML = '🏁 خلصت كويز الدرس: ' + correct + ' من ' + total + ' صح' +
+        (correct === total ? ' : أداء مثالي 👏' : ' : راجع اللي غلطت فيه فوق وافهم ليه');
+      if (correct===total) document.getElementById('complete-badge').classList.add('show');
+      else { const retry=document.createElement('button'); retry.className='solution-toggle';retry.textContent='حاول الكويز تاني';retry.onclick=()=>{lesson.quiz.forEach((q,i)=>delete progress.answers[lesson.id+':'+i]);saveProgress();openLesson(lesson.id);};result.appendChild(retry); }
+      refreshProgressUI();
+    }
+  }
+
+  /* ---------- exercises ---------- */
+  function buildExercises(lesson) {
+    var host = document.getElementById('exs');
+    lesson.exercises.forEach(function (ex, i) {
+      var box = document.createElement('div');
+      box.className = 'exercise';
+      var html = '<div class="task">تمرين ' + (i + 1) + ': ' + renderInline(ex.task) + '</div>';
+      if (ex.hint) html += '<p style="color:var(--muted);font-size:.88rem">💡 تلميح: ' + renderInline(ex.hint) + '</p>';
+      html += '<label>اكتب محاولتك قبل الحل:</label><textarea class="attempt" dir="ltr" rows="4" spellcheck="false" aria-label="محاولتك"></textarea><p class="small">لو التمرين Calculated Field، جربه في معمل Tableau من الشريط فوق. لو خطوات واجهة، طبقها في Tableau Public نفسه. المحاولة هنا للمذاكرة وبتتحفظ في متصفحك.</p><button class="solution-toggle">أظهر الحل النموذجي</button>';
+      html += '<div class="solution">' + (ex.code ? highlight(ex.code) : '') +
+        (ex.why ? '<div class="why">' + renderInline(ex.why) + '</div>' : '') + '</div>';
+      box.innerHTML = html;
+      var btn = box.querySelector('.solution-toggle');
+      var sol = box.querySelector('.solution');
+      var attempt=box.querySelector('.attempt');var ak='attempt:'+lesson.id+':'+i;attempt.value=progress[ak]||'';attempt.oninput=()=>{progress[ak]=attempt.value;saveProgress();};
+      btn.addEventListener('click', function () {
+        sol.classList.toggle('open');
+        btn.textContent = sol.classList.contains('open') ? 'إخفي الحل' : 'أظهر الحل النموذجي';
+      });
+      host.appendChild(box);
+    });
+  }
+
+  /* ---------- reset + menu ---------- */
+  document.getElementById('reset-btn').addEventListener('click', function () {
+    if (confirm('متأكد إنك عايز تمسح كل تقدمك وتبدأ من الأول؟')) {
+      progress = { answers: {}, done: {} };
+      saveProgress();
+      buildNav();
+      refreshProgressUI();
+      if (currentLesson) openLesson(currentLesson.id);
+    }
+  });
+
+  document.getElementById('menu-toggle').addEventListener('click', function () {
+    document.getElementById('sidebar').classList.toggle('open');
+  });
+
+  /* ---------- boot ---------- */
+  buildNav();
+  refreshProgressUI();
+})();
+
+</script>
+<script>
+/* معمل Tableau: mini calculated-field evaluator over the course orders table */
+(function(root){
+'use strict';
+var COLS=['order_id','order_date','product_name','category','city','customer','quantity','revenue','cost','profit','supplier'];
+var ROWS=[
+[1,'2025-01-03','Laptop','Tech','Cairo','Aya',1,12000,9500,2500,'TechLine'],
+[2,'2025-01-15','Chair','Furniture','Giza','Ali',1,2000,1400,600,'FurniCo'],
+[3,'2025-01-21','Mouse','Tech','Cairo','Omar',2,500,300,200,'TechLine'],
+[4,'2025-02-05','Laptop','Tech','Alexandria','Mona',1,13000,10000,3000,'TechLine'],
+[5,'2025-02-14','Desk','Furniture','Cairo','Aya',1,4000,2800,1200,'FurniCo'],
+[6,'2025-02-25','Chair','Furniture','Giza','Ali',1,2000,1400,600,'FurniCo'],
+[7,'2025-03-04','Mouse','Tech','Cairo','Sara',2,600,350,250,'TechLine'],
+[8,'2025-03-11','Laptop','Tech','Alexandria','Mona',1,12500,9800,2700,'TechLine'],
+[9,'2025-03-18','Desk','Furniture','Giza','Omar',1,4500,3100,1400,'FurniCo'],
+[10,'2025-04-02','Chair','Furniture','Cairo','Sara',1,2200,1500,700,'FurniCo'],
+[11,'2025-04-09','Mouse','Tech','Cairo','Aya',2,700,420,280,'TechLine'],
+[12,'2025-04-25','Desk','Furniture','Alexandria','Mona',1,5000,3500,1500,'FurniCo']];
+var CALCS={};
+function E(msg){var e=new Error(msg);e.tab=true;return e;}
+function monthOf(r){return r[1].slice(5,7);}
+
+/* ---------- tokenizer ---------- */
+function tokenize(src){
+  var t=[],i=0,n=src.length,m;
+  while(i<n){
+    var c=src[i];
+    if(/\s/.test(c)){i++;continue;}
+    if(c==='/'&&src[i+1]==='/'){while(i<n&&src[i]!=='\n')i++;continue;}
+    if(/[0-9]/.test(c)){m=/^\d+(\.\d+)?/.exec(src.slice(i));t.push({t:'num',v:parseFloat(m[0])});i+=m[0].length;continue;}
+    if(c==="'"){var s='';i++;while(i<n&&src[i]!=="'"){s+=src[i++];}
+      if(i>=n)throw E("نص مفتوح: ناقص علامة ' في الآخر");i++;t.push({t:'str',v:s});continue;}
+    if(c==='['){var k=src.indexOf(']',i);if(k<0)throw E('ناقص ] في آخر اسم الحقل');t.push({t:'field',name:src.slice(i+1,k).trim()});i=k+1;continue;}
+    if(/[A-Za-z_]/.test(c)){m=/^[A-Za-z_][A-Za-z_0-9]*/.exec(src.slice(i));t.push({t:'id',v:m[0]});i+=m[0].length;continue;}
+    var two=src.substr(i,2);
+    if(['<>','<=','>=','!='].indexOf(two)>=0){t.push({t:'op',v:two==='!='?'<>':two});i+=2;continue;}
+    if('+-*/()=<>,'.indexOf(c)>=0){t.push({t:'op',v:c});i++;continue;}
+    throw E('رمز غير مفهوم في الصيغة: ' + c);
+  }
+  return t;
+}
+
+/* ---------- parser ---------- */
+function parse(src){
+  var tk=tokenize(src),p=0;
+  function peek(){return tk[p];}
+  function isOp(v){var x=tk[p];return x&&x.t==='op'&&x.v===v;}
+  function isId(v){var x=tk[p];return x&&x.t==='id'&&x.v.toUpperCase()===v;}
+  function expectOp(v){if(!isOp(v))throw E('متوقع "'+v+'" في الصيغة');p++;}
+  function expr(){return or();}
+  function or(){var l=and();while(isId('OR')){p++;l={k:'bin',op:'OR',l:l,r:and()};}return l;}
+  function and(){var l=cmp();while(isId('AND')){p++;l={k:'bin',op:'AND',l:l,r:cmp()};}return l;}
+  function cmp(){var l=add();
+    for(;;){var x=peek();
+      if(x&&x.t==='op'&&['=','<>','<','>','<=','>='].indexOf(x.v)>=0){p++;l={k:'bin',op:x.v,l:l,r:add()};}
+      else break;}
+    return l;}
+  function add(){var l=mul();while(isOp('+')||isOp('-')){var o=tk[p++].v;l={k:'bin',op:o,l:l,r:mul()};}return l;}
+  function mul(){var l=unary();while(isOp('*')||isOp('/')){var o=tk[p++].v;l={k:'bin',op:o,l:l,r:unary()};}return l;}
+  function unary(){if(isOp('-')){p++;return {k:'neg',e:unary()};}if(isId('NOT')){p++;return {k:'not',e:unary()};}return prim();}
+  function prim(){
+    var x=tk[p];if(!x)throw E('الصيغة ناقصة: في حاجة متوقعة في الآخر');
+    if(x.t==='num'){p++;return {k:'num',v:x.v};}
+    if(x.t==='str'){p++;return {k:'str',v:x.v};}
+    if(x.t==='field'){p++;return {k:'field',name:x.name};}
+    if(x.t==='op'&&x.v==='('){p++;var e=expr();expectOp(')');return e;}
+    if(x.t==='id'){
+      var nm=x.v.toUpperCase();
+      if(nm==='IF'){
+        p++;var cond=expr();
+        if(!isId('THEN'))throw E('ناقص THEN بعد الشرط');p++;
+        var a=expr();var b=null;
+        if(isId('ELSE')){p++;b=expr();}
+        if(isId('ELSEIF'))throw E('المعمل بيدعم IF و ELSE بس من غير ELSEIF');
+        if(!isId('END'))throw E('ناقص END في آخر الـ IF');p++;
+        return {k:'if',c:cond,a:a,b:b};
+      }
+      if(nm==='IIF'){
+        p++;expectOp('(');var c2=expr();expectOp(',');var a2=expr();expectOp(',');var b2=expr();expectOp(')');
+        return {k:'if',c:c2,a:a2,b:b2};
+      }
+      if(['SUM','AVG','MIN','MAX','COUNT','COUNTD'].indexOf(nm)>=0){
+        p++;expectOp('(');var arg=expr();expectOp(')');
+        return {k:'agg',fn:nm,arg:arg};
+      }
+      if(nm==='TRUE'){p++;return {k:'bool',v:true};}
+      if(nm==='FALSE'){p++;return {k:'bool',v:false};}
+      throw E('دالة غير معروفة في المعمل: '+x.v+'. المدعوم: SUM AVG MIN MAX COUNT COUNTD IF IIF AND OR NOT');
+    }
+    throw E('رمز مش متوقع في الصيغة: ' + (x.v!==undefined?x.v:x.name));
+  }
+  var ast=expr();
+  if(p<tk.length)throw E('في كلام زيادة بعد نهاية الصيغة. راجع الأقواس والكلمات');
+  return ast;
+}
+
+/* ---------- evaluator ---------- */
+function fieldIdx(name){
+  var nm=String(name).toLowerCase();
+  for(var i=0;i<COLS.length;i++)if(COLS[i].toLowerCase()===nm)return i;
+  return -1;
+}
+function hasAgg(n){
+  if(!n||typeof n!=='object')return false;
+  if(n.k==='agg')return true;
+  for(var key in n)if(hasAgg(n[key]))return true;
+  return false;
+}
+function truthy(v){return !!v;}
+function ev(n,row,rows){
+  switch(n.k){
+    case 'num':return n.v;
+    case 'str':return n.v;
+    case 'bool':return n.v;
+    case 'field':
+      if(CALCS.hasOwnProperty(n.name)){
+        var ast=CALCS[n.name];
+        if(row){if(hasAgg(ast))throw E('['+n.name+'] معرف كحساب متجمع، مينفعش يتستخدم جوه صف. استخدمه لوحده');return ev(ast,row,rows);}
+        return ev(ast,null,rows);
+      }
+      var ix=fieldIdx(n.name);
+      if(ix<0)throw E('حقل مش موجود: ['+n.name+']. الحقول: '+COLS.join(' و '));
+      if(!row)throw E('['+n.name+'] لازم يتجمع: حطه جوه SUM([..]) أو AVG أو MIN أو MAX أو COUNT');
+      return row[ix];
+    case 'neg':return -ev(n.e,row,rows);
+    case 'not':return !truthy(ev(n.e,row,rows));
+    case 'bin':
+      if(n.op==='AND')return truthy(ev(n.l,row,rows))&&truthy(ev(n.r,row,rows));
+      if(n.op==='OR')return truthy(ev(n.l,row,rows))||truthy(ev(n.r,row,rows));
+      var a=ev(n.l,row,rows),b=ev(n.r,row,rows);
+      switch(n.op){
+        case '+':if(typeof a==='string'||typeof b==='string')return String(a)+String(b);return a+b;
+        case '-':return a-b;case '*':return a*b;
+        case '/':if(b===0)throw E('قسمة على صفر');return a/b;
+        case '=':return a===b;case '<>':return a!==b;
+        case '<':return a<b;case '>':return a>b;case '<=':return a<=b;case '>=':return a>=b;
+      }
+      throw E('عملية غير مدعومة: '+n.op);
+    case 'if':
+      if(truthy(ev(n.c,row,rows)))return ev(n.a,row,rows);
+      return n.b?ev(n.b,row,rows):null;
+    case 'agg':
+      var data=rows;if(!data)throw E(n.fn+' محتاجة تجمع على صفوف، وإنت بتستخدمها جوه صف');
+      var vals=[];
+      for(var i=0;i<data.length;i++){
+        var v=ev(n.arg,data[i],data);
+        if(v===null||v===undefined||v!==v)continue;
+        vals.push(v);
+      }
+      if(n.fn==='COUNT')return vals.length;
+      if(n.fn==='COUNTD'){var seen={};var c=0;for(var j=0;j<vals.length;j++){var kk=typeof vals[j]+':'+vals[j];if(!seen[kk]){seen[kk]=1;c++;}}return c;}
+      if(vals.length===0)throw E(n.fn+' مفيش قيم تتجمع (راجع الشرط جوه الـ IF)');
+      if(n.fn==='SUM'){var s=0;for(var j2=0;j2<vals.length;j2++){if(typeof vals[j2]!=='number')throw E('SUM محتاجة أرقام، ووصلها نص');s+=vals[j2];}return s;}
+      if(n.fn==='AVG'){var s2=0;for(var j3=0;j3<vals.length;j3++){if(typeof vals[j3]!=='number')throw E('AVG محتاجة أرقام');s2+=vals[j3];}return s2/vals.length;}
+      if(n.fn==='MIN')return Math.min.apply(null,vals);
+      if(n.fn==='MAX')return Math.max.apply(null,vals);
+      throw E('دالة غير مدعومة: '+n.fn);
+  }
+  throw E('حاجة غلط في الصيغة');
+}
+function fmt(v){
+  if(typeof v==='number'){
+    if(!isFinite(v))return 'غير معرف';
+    if(Math.abs(v-Math.round(v))<1e-9)return String(Math.round(v)).replace(/\B(?=(\d{3})+(?!\d))/g,',');
+    return String(Math.round(v*10000)/10000);
+  }
+  if(typeof v==='boolean')return v?'TRUE':'FALSE';
+  if(v===null||v===undefined)return 'فاضي (Null)';
+  return String(v);
+}
+/* run(formula, groupField) -> {value, groups} أو تعريف calc باسم */
+function run(src,groupField){
+  src=String(src).trim();
+  var defName=null,eq=src.indexOf('=');
+  if(eq>0){
+    var head=src.slice(0,eq).trim();
+    if(/^[A-Za-z][A-Za-z0-9 _-]*$/.test(head)&&!/^(SUM|AVG|MIN|MAX|COUNT|COUNTD|IF|IIF|AND|OR|NOT)$/i.test(head)){
+      defName=head;src=src.slice(eq+1);
+    }
+  }
+  var ast=parse(src);
+  if(defName){CALCS[defName]=ast;var v0=ev(ast,null,ROWS);return {name:defName,value:v0,groups:null};}
+  if(groupField&&groupField!=='all'){
+    var order=[],buckets={},i,r,key;
+    if(groupField==='month'){
+      for(i=0;i<ROWS.length;i++){key=monthOf(ROWS[i]);if(!buckets[key]){buckets[key]=[];order.push(key);}buckets[key].push(ROWS[i]);}
+    }else{
+      var gx=fieldIdx(groupField);if(gx<0)throw E('حقل التجميع مش موجود: '+groupField);
+      for(i=0;i<ROWS.length;i++){key=ROWS[i][gx];if(!buckets[key]){buckets[key]=[];order.push(key);}buckets[key].push(ROWS[i]);}
+    }
+    var groups=order.map(function(k){return {key:k,value:ev(ast,null,buckets[k])};});
+    return {name:null,value:null,groups:groups};
+  }
+  return {name:null,value:ev(ast,null,ROWS),groups:null};
+}
+function reset(){for(var k in CALCS)delete CALCS[k];}
+function calcNames(){var a=[];for(var k in CALCS)a.push(k);return a;}
+root.TABLEAULAB={run:run,fmt:fmt,COLS:COLS,ROWS:ROWS,reset:reset,calcNames:calcNames};
+})(window);
+</script>
+<script>
+/* معمل Tableau: التحديات + UI */
+var TAB_CHALLENGES=[
+{t:'إجمالي الإيراد',q:'اكتب صيغة بتطلع إجمالي الإيراد (revenue) لكل الطلبات.',exp:59000,sol:'SUM([revenue])'},
+{t:'إجمالي الربح',q:'اجمع حقل profit لكل الطلبات.',exp:14930,sol:'SUM([profit])'},
+{t:'عدد الطلبات',q:'اكتب صيغة بتعد الطلبات (عد الصفوف باستخدام order_id).',exp:12,sol:'COUNT([order_id])'},
+{t:'عدد العملاء المختلفين',q:'كام عميل مختلف في الداتا؟ (عدد القيم المختلفة مش عدد الصفوف)',exp:5,sol:'COUNTD([customer])'},
+{t:'متوسط قيمة الطلب',q:'اكتب صيغة بتطلع متوسط الإيراد للطلب الواحد.',exp:4916.6667,sol:'AVG([revenue])'},
+{t:'إيراد القاهرة',q:'إيراد مدينة Cairo بس، باستخدام IF جوه SUM.',exp:20000,sol:"SUM(IF [city] = 'Cairo' THEN [revenue] END)"},
+{t:'أكبر طلب',q:'أعلى قيمة إيراد لطلب واحد.',exp:13000,sol:'MAX([revenue])'},
+{t:'هامش الربح',q:'الهامش = مجموع الربح على مجموع الإيراد (نسبة بين 0 و 1).',exp:0.2530508,sol:'SUM([profit]) / SUM([revenue])'},
+{t:'إيراد فئة Tech',q:'إيراد فئة Tech بس.',exp:39300,sol:"SUM(IF [category] = 'Tech' THEN [revenue] END)"},
+{t:'عدد المنتجات اللي اتباعت',q:'كام منتج مختلف ظهر في الطلبات؟',exp:4,sol:'COUNTD([product_name])'},
+{t:'إيراد مورد FurniCo',q:'إيراد المنتجات اللي المورد بتاعها FurniCo.',exp:19700,sol:"SUM(IF [supplier] = 'FurniCo' THEN [revenue] END)"},
+{t:'متوسط الكمية في القاهرة',q:'متوسط quantity لطلبات القاهرة بس.',exp:1.5,sol:"AVG(IF [city] = 'Cairo' THEN [quantity] END)"},
+{t:'الطلبات الكبيرة',q:'كام طلب إيراده أكبر من 5000؟',exp:3,sol:'COUNT(IF [revenue] > 5000 THEN [order_id] END)'},
+{t:'Calculated Field باسم',q:'عرف Calculated Field اسمه Profit Ratio بالصيغة SUM([profit]) / SUM([revenue]) وبعدين احسبه بكتابة [Profit Ratio]. الناتج هو الهامش.',exp:0.2530508,sol:'Profit Ratio = SUM([profit]) / SUM([revenue]) ثم في سطر تاني: [Profit Ratio]'}
+];
+
+/* معمل Tableau: UI */
+(function(){
+'use strict';
+var D=window.TABLEAULAB;
+var LS='tableau-zero-lab-v1';
+var solved={};try{solved=JSON.parse(localStorage.getItem(LS)||'{}')||{};}catch(e){solved={};}
+function save(){try{localStorage.setItem(LS,JSON.stringify(solved));}catch(e){}}
+var lab=document.getElementById('lab');
+var input=document.getElementById('fx-input'),out=document.getElementById('fx-output');
+document.getElementById('lab-link').onclick=function(){document.getElementById('hero').style.display='none';document.getElementById('lesson').style.display='none';lab.hidden=false;window.scrollTo(0,0);};
+document.getElementById('home-link').onclick=function(){lab.hidden=true;document.getElementById('lesson').style.display='none';document.getElementById('hero').style.display='block';};
+document.getElementById('start-btn').onclick=function(){document.querySelector('.nav-item').click();};
+function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+/* model preview */
+(function(){
+  var h='<div class="dx-tname">orders (بعد Join بين sales_data و products)</div><table class="fx-grid"><tr>'+D.COLS.map(function(c){return '<th>'+c+'</th>';}).join('')+'</tr>';
+  D.ROWS.forEach(function(r){h+='<tr>'+r.map(function(c){return '<td>'+c+'</td>';}).join('')+'</tr>';});
+  h+='</table><p class="small">حقل <code>profit</code> = <code>[revenue] - [cost]</code> متجهزلك كأنه Calculated Field جاهز، و<code>supplier</code> جاي من Join مع جدول المنتجات. جرب تكتب <code>month</code> في الـ Rows shelf عشان تشوف التجميع بالشهر.</p>';
+  document.getElementById('fx-sheet').innerHTML=h;
+})();
+var selRows=document.getElementById('sel-rows');
+var cur=-1;
+var chHost=document.getElementById('dx-challenges'),chInfo=document.getElementById('dx-current'),solBtn=document.getElementById('dx-sol-btn'),solBox=document.getElementById('dx-sol');
+function renderChallenges(){
+  chHost.innerHTML='';var n=0;
+  TAB_CHALLENGES.forEach(function(c,i){
+    var b=document.createElement('button');b.type='button';b.className='dx-ch'+(solved[i]?' done':'')+(i===cur?' active':'');
+    b.textContent=(solved[i]?'✓ ':'')+(i+1)+'. '+c.t;if(solved[i])n++;
+    b.onclick=function(){cur=i;selRows.value='all';solBox.hidden=true;solBox.textContent='';solBtn.hidden=false;input.value='';renderChallenges();showCur();input.focus();};
+    chHost.appendChild(b);
+  });
+  document.getElementById('dx-score').textContent='حليت '+n+' من '+TAB_CHALLENGES.length+' تحدي';
+}
+function showCur(){
+  if(cur<0){chInfo.hidden=true;return;}
+  var c=TAB_CHALLENGES[cur];chInfo.hidden=false;
+  chInfo.innerHTML='<b>تحدي '+(cur+1)+': '+esc(c.t)+'</b><br>'+esc(c.q)+'<br><span class="small">التحديات بتتقارن مع الـ Rows على "بدون".</span>';
+}
+solBtn.onclick=function(){if(cur<0)return;solBox.textContent=TAB_CHALLENGES[cur].sol;solBox.hidden=false;};
+function addLine(f,res,cls){
+  var line=document.createElement('div');line.className='fx-line';
+  line.innerHTML='<div class="fx-f"></div><div class="fx-r '+cls+'"></div>';
+  line.querySelector('.fx-f').textContent=f;line.querySelector('.fx-r').innerHTML=res;
+  out.prepend(line);return line;
+}
+function chips(){
+  var host=document.getElementById('dx-measures');var names=D.calcNames();
+  host.innerHTML=names.length?'Calculated Fields اللي عرفتها: '+names.map(function(n){return '<code>['+esc(n)+']</code>';}).join(' '):'';
+}
+function run(){
+  var f=input.value.trim();var gf=selRows.value;
+  try{
+    var r=D.run(f,gf);var txt;
+    if(r.groups){
+      txt='<table class="fx-grid"><tr><th>'+esc(gf)+'</th><th>القيمة</th></tr>'+
+        r.groups.map(function(g){return '<tr><td>'+esc(g.key)+'</td><td>'+esc(D.fmt(g.value))+'</td></tr>';}).join('')+'</table>';
+      addLine(f,txt,'fx-ok');
+    }else{
+      txt=(r.name?'['+esc(r.name)+'] اتسجل = ':'= ')+esc(D.fmt(r.value));
+      var line=addLine(f,txt,'fx-ok');
+      if(cur>=0&&typeof r.value==='number'){
+        var ch=TAB_CHALLENGES[cur];var ok=Math.abs(r.value-ch.exp)<0.001;
+        var v=document.createElement('div');v.className='dx-verdict '+(ok?'ok':'no');
+        v.textContent=ok?'✅ صح! الناتج مطابق للمطلوب في التحدي.':'❌ الناتج مش مطابق للمطلوب. راجع الشرط والتجميعة، أو اطلع على الحل.';
+        line.appendChild(v);
+        if(ok){solved[cur]=true;save();renderChallenges();}
+      }else if(cur>=0&&!r.name){
+        var v2=document.createElement('div');v2.className='dx-verdict no';v2.textContent='❌ التحدي محتاج ناتج رقم واحد، والصيغة دي رجعت حاجة تانية (لو Rows مختارة، رجّعها "بدون").';line.appendChild(v2);
+      }
+    }
+  }catch(e){
+    addLine(f,e&&e.tab?('خطأ: '+esc(e.message)):'خطأ في الصيغة: راجع الأقواس والأسماء','fx-err');
+  }
+  chips();
+}
+document.getElementById('run-fx').onclick=run;
+input.addEventListener('keydown',function(e){if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();run();}});
+document.getElementById('reset-fx').onclick=function(){out.innerHTML='';D.reset();chips();};
+document.getElementById('reset-lab').onclick=function(){if(confirm('تمسح تقدم التحديات؟')){solved={};save();renderChallenges();}};
+document.querySelectorAll('.fx-example').forEach(function(b){b.onclick=function(){input.value=b.getAttribute('data-fx');cur=-1;renderChallenges();showCur();run();};});
+renderChallenges();showCur();
+})();
+</script>
+</body>
+</html>
