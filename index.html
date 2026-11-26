@@ -1894,5 +1894,11 @@ document.querySelectorAll('.fx-example').forEach(function(b){b.onclick=function(
 renderChallenges();showCur();
 })();
 </script>
+<script>/* standalone waw: Cairo draws a lone و like a Latin g next to Latin words, so render it with Noto Sans Arabic */
+(function(){if(window.__waw)return;window.__waw=1;try{var l=document.createElement('link');l.rel='stylesheet';l.href='https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@600&display=swap';document.head.appendChild(l);var st=document.createElement('style');st.textContent=".w{font-family:'Noto Sans Arabic','Segoe UI',Tahoma,sans-serif!important;font-weight:600}";document.head.appendChild(st)}catch(e){}
+var RE=/(^|\s)\u0648(?=\s|$)/,SKIP={SCRIPT:1,STYLE:1,CODE:1,PRE:1,TEXTAREA:1,OPTION:1,TITLE:1,NOSCRIPT:1,INPUT:1};
+function fix(n){if(n.nodeType===3){if(!RE.test(n.nodeValue))return;var p=n.parentNode;if(!p||SKIP[p.nodeName]||p.isContentEditable)return;var f=document.createDocumentFragment(),s=n.nodeValue,re=/(^|\s)\u0648(?=\s|$)/g,last=0,m;while((m=re.exec(s))){var at=m.index+m[1].length;f.appendChild(document.createTextNode(s.slice(last,at)));var sp=document.createElement('span');sp.className='w';sp.textContent='\u0648';f.appendChild(sp);last=at+1}f.appendChild(document.createTextNode(s.slice(last)));p.replaceChild(f,n)}else if(n.nodeType===1&&n.className!=='w'&&!SKIP[n.nodeName]){var c=n.firstChild;while(c){var nx=c.nextSibling;fix(c);c=nx}}}
+var busy=false;function run(){if(busy)return;busy=true;try{fix(document.body)}catch(e){}busy=false}
+function go(){new MutationObserver(function(ms){if(busy)return;busy=true;try{ms.forEach(function(m){m.addedNodes.forEach(fix)})}catch(e){}busy=false}).observe(document.body,{childList:true,subtree:true});run()}if(document.body)go();else document.addEventListener('DOMContentLoaded',go)})();</script>
 </body>
       </html>
